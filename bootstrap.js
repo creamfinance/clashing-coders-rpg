@@ -1,9 +1,10 @@
 var LevelRepository = require('./repositories/LevelRepository'),
+    Templates = require('./templates'),
     waiter = require('./util/waiter'),
     Users = require('./repositories/UserRepository');
 
 module.exports = function (cb) {
-    var wait = waiter(2, cb);
+    var wait = waiter(3, cb);
 
     global.log = console.log;
     require('./object/append');
@@ -32,4 +33,5 @@ module.exports = function (cb) {
 
     LevelRepository.load(wait);
     Users.load(wait);
+    Templates.load(wait);
 };

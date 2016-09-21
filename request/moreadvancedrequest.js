@@ -104,13 +104,11 @@ module.exports = MoreAdvancedRequest({
         this.jsonResponse.appendRecursive(data);
     },
     sendResponse: function (data) {
-        if (data) {
-            this.appendResponse(data);
-        }
-        
+        data = data || {};
+
         this.addTiming();
         this.head(200, 'application/json');
-        this.write(JSON.stringify(this.jsonResponse));
+        this.write(JSON.stringify(data));
         this.jsonResponse = null;
         this.end();
 

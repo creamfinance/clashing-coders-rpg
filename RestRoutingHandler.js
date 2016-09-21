@@ -326,7 +326,8 @@ module.exports = RestRoutingHandler({
                             });
                         }
                     } else {
-                        callback(new Error('Body is not application/json'));
+                        //callback(new Error('Body is not application/json'));
+                        callback();
                     }
                 };
 

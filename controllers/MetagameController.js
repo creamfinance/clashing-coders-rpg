@@ -1,7 +1,8 @@
 var Class = require('class'),
     waiter = require('../util/waiter'),
     UserRepository = require('../repositories/UserRepository'),
-    buildVariableDefinition = require('../util/buildVariableDefinition');
+    buildVariableDefinition = require('../util/buildVariableDefinition'),
+    Templates = require('../templates');
 
 var MetagameController = Class.bind(null, 'MetagameController', Object);
 
@@ -15,11 +16,17 @@ module.exports = MetagameController({
                 requests: [
                     {
                         headers: new Validator({
-
+                            'content-type': new EnumRule([ 'application/json' ]),
                         }),
                         body: new Validator({}),
                         resolver: [ ],
                         callback: this.handleGetStats.bind(this),
+                    },
+                    {
+                        headers: new Validator({ }),
+                        body: new Validator({}),
+                        resolver: [ ],
+                        callback: this.handleGetStatsView.bind(this),
                     },
                 ],
             }
@@ -28,6 +35,14 @@ module.exports = MetagameController({
         router.registerPath('GET', '/game/stats/{LEVEL_ID}',
             {
                 requests: [
+                    {
+                        headers: new Validator({
+                            'content-type': new EnumRule([ 'application/json' ]),
+                        }),
+                        body: new Validator({}),
+                        resolver: [ ],
+                        callback: this.handleGetStatsForLevel.bind(this),
+                    },
                     {
                         headers: new Validator({ }),
                         body: new Validator({}),
@@ -48,7 +63,6 @@ module.exports = MetagameController({
      */
     handleGetStats: function handleGetStats(request) {
         UserRepository.getStats(function (result) {
-            console.log(result);
             request.sendResponse(result);
         });
     },
@@ -57,9 +71,20 @@ module.exports = MetagameController({
      * 
      * @param request @todo 
      */
+    handleGetStatsView: function handleGetStatsView(request) {
+        UserRepository.getStats(function (result) {
+            request.write(Templates.get('stats')({ users: result }));
+            request.end();
+        });
+    },
+    
+    /**
+     * TODO: document
+     * 
+     * @param request @todo 
+     */
     handleGetStatsForLevel: function handleGetStatsForLevel(request) {
         UserRepository.getStatsForLevel(request.variables.LEVEL_ID, function (result) {
-            console.log(result);
             request.sendResponse(result);
         });
     },
