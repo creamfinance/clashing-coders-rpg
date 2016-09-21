@@ -78,4 +78,52 @@ module.exports = {
             );
         });
     },
+    /**
+     * TODO: document
+     *  
+     */
+    getStats: function getStats(cb) {
+        pool.connect(function (err, client, done) {
+            if (err) { console.log(err); }
+
+            client.query('SELECT user_id, username, max(level_id) as level, sum(finished - started) as total_time FROM users JOIN level_metadata ON users.id=level_metadata.user_id GROUP BY user_id, username ORDER BY max(level_id), sum(finished - started)', [],
+                function (err, result) {
+                    if (err) { console.log(err); }
+                    console.log(result.rows);
+
+                    cb(result.rows.map(function (obj) { return {
+                        user: obj.username,
+                        level: obj.level,
+                        time: obj.total_time.hours + ':' + obj.total_time.minutes + ':' + obj.total_time.seconds, 
+                    }; }));
+                    
+                    done();
+                }
+            );
+        });
+    },
+    /**
+     * TODO: document
+     * 
+     * @param level_id @todo 
+     */
+    getStatsForLevel: function getStatsForLevel(level_id, cb) {
+        pool.connect(function (err, client, done) {
+            if (err) { console.log(err); }
+
+            client.query('SELECT user_id, username, (finished - started) as time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE level_id = $1 ORDER BY started - finished', [ level_id],
+                function (err, result) {
+                    if (err) console.log(err);
+
+
+                    cb(result.rows.map(function (obj) { return {
+                        user: obj.username,
+                        time: obj.time.hours + ':' + obj.time.minutes + ':' + obj.time.seconds, 
+                    }; }));
+                }
+            );
+        });
+    },
+    
+    
 };
