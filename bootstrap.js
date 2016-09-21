@@ -1,10 +1,9 @@
 var LevelRepository = require('./repositories/LevelRepository'),
-    Users = require('./users');
+    waiter = require('./util/waiter'),
+    Users = require('./repositories/UserRepository');
 
 module.exports = function (cb) {
-    var waiter = (function (count, cb) {
-        var i = 0; return function () { if (++i == count) { cb(); } };
-    }(2, cb));
+    var wait = waiter(2, cb);
 
     global.log = console.log;
     require('./object/append');
@@ -27,6 +26,10 @@ module.exports = function (cb) {
         return this.substr(0, index) + char + this.substr(index + char.length);
     });
 
-    LevelRepository.load(waiter);
-    Users.reload(waiter);
+    F(Object.prototype, 'map', function (cb, start) {
+        return Object.keys(this).reduce(cb.bind(this), start || {});
+    });
+
+    LevelRepository.load(wait);
+    Users.load(wait);
 };

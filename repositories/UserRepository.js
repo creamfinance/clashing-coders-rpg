@@ -1,5 +1,6 @@
 var redis = require('../redis'),
-    pg = require('../pool');
+    pool = require('../pool'),
+    waiter = require('../util/waiter');
 
 module.exports = {
     users: {},
@@ -12,12 +13,7 @@ module.exports = {
             client.query('SELECT * FROM users', [], function (err, result) {
                 if (err) { cb(err); }
 
-                var waiter = (function (cb) {
-                    var num = result.rows.length,
-                        inc = 0;
-                    
-                    return function () { if (++inc == num) { cb(); } };
-                }(cb));
+                var wait = waiter(result.rows.length, cb);
 
                 for (var i = 0, max = result.rows.length; i < max; i += 1) {
                     that.users[result.rows[i].id] = result.rows[i];
@@ -29,33 +25,29 @@ module.exports = {
                         if (err) { cb(err); return; }
 
                         for (var i = 0, max = result.rows.length; i < max; i += 1) {
-                            //that.users[result.rows[i].user_id].
-                                //level_metadata[result.rows[i].level_id] = result.rows[i];
-                            // TODO: HMSET
-                            redis.set(user.id + '.' + result.rows[i].level_id, 
-                                JSON.stringify(result.rows[i]), function (err, result) {
-                                    if (err) {console.log(err, result);}
-                                }
-                            );
+                            that.users[result.rows[i].user_id].
+                                level_metadata[result.rows[i].level_id] = result.rows[i];
                         }
 
-                        waiter();
+                        wait();
                     });
                 }
             });
         });
     },
-    createMetadata: function (user, level_id, cb) {
+    get: function (user_id) {
+        return this.users[user_id]; 
+    },
+    createMetadata: function (user, level_id) {
         var d = new Date(),
             metadata = {
                 started: d,
                 finished: null,
-                points: null,
                 num_fails: 0
             };
 
         // We just put this out there, no need to wait for it
-        pg.connect(function (err, client, done) {
+        pool.connect(function (err, client, done) {
             if (err) { console.log(err); }
             
             client.query('INSERT INTO level_metadata(user_id, level_id, started) VALUES($1, $2, $3)',
@@ -65,29 +57,25 @@ module.exports = {
             });
         });
 
-        // TODO: HMSET
-        redis.set(user.id + '.' + level_id, JSON.stringify(metadata), function (err, result) {
-            if (err) { console.log(err); }
-        });
-
-        return metadata;
+        user.level_metadata[level_id] = metadata;
     },
     updateMetadata: function (user, level_id, metadata, cb) {
-        pg.connect(function (err, client, done) {
+        var user_metadata = user.level_metadata[level_id];
+
+        for (var key in metadata) {
+            user_metadata[key] = metadata[key];
+        }
+
+        pool.connect(function (err, client, done) {
             if (err) { console.log(err); }
 
-            client.query('UPDATE level_metadata SET finished = $1, points = $2, num_fails = $3 WHERE user_id = $4 AND level_id = $5',
-                [ metadata.finished, metadata.points, metadata.num_fails, user.id, level_id ],
+            client.query('UPDATE level_metadata SET finished = $1, times_failed = $2 WHERE user_id = $3 AND level_id = $4',
+                [ user_metadata.finished, user_metadata.num_fails, user.id, level_id ],
                 function (err, result) {
                     if (err) { console.log(err); }
                     done();
                 }
             );
-        });
-
-        redis.set(user.id + '.' + level_id, JSON.stringify(metadata), function (err, result) {
-            if (err) { console.log(err); }
-            cb();
         });
     },
 };

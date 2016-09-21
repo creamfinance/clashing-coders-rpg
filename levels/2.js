@@ -1,9 +1,10 @@
 module.exports = {
-    start: [{x: 4, y: 4}, { x:1, y:1 }],
+    start: [{x:3, y:3}, { x:1, y:1 }, { x:3, y:8 }],
     isFinished: function (players) {
         //var fin = false;
         return players[0].position.x == 8 && players[0].position.y == 1 &&
-            players[1].position.x == 1 && players[1].position.y == 1;
+            players[1].position.x == 1 && players[1].position.y == 1 &&
+            players[2].position.x == 3 && players[2].position.y == 2;
     },
     processAction: function (player, action) {
         switch (action.toLowerCase()) {

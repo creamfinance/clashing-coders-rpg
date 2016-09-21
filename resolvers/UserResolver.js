@@ -1,5 +1,6 @@
 var redis = require('../redis'),
-    users = require('../users');
+    users = require('../repositories/UserRepository'),
+    Player = require('../game/player');
 
 module.exports = function UserResolver(request, next) {
     redis.get(request.req.headers['x-token'], function (err, data) {
@@ -14,10 +15,7 @@ module.exports = function UserResolver(request, next) {
             return request.sendUnauthorized();
         }
 
-        var data = JSON.parse(data);
-
-        request.user = users.users[data.id];
-
+        request.user = users.users[data];
         next();
     });
 };

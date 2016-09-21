@@ -2,29 +2,17 @@ var Class = require('class'),
     LevelResolver = require('../resolvers/LevelResolver'),
     UserResolver = require('../resolvers/UserResolver'),
     ActionResolver = require('../resolvers/ActionResolver'),
-    tiles = require('../game/tiles'),
+    PlayerResolver = require('../resolvers/PlayerResolver'),
     Player = require('../game/player'),
+    waiter = require('../util/waiter'),
     UserRepository = require('../repositories/UserRepository'),
-    tiles_map = Object.keys(tiles).reduce(function (n, c) 
-        { n[tiles[c].prototype.display] = {
+    tiles_map = require('../game/tiles').map(function (n, c) { 
+        n[this[c].prototype.display] = {
             name: c,
-            weight: tiles[c].prototype.weight
-        }; return n; }, {}),
-    buildVariableDefinition = function (vars) {
-        var ret = {},
-            immediate = {};
-
-        for (var vname in vars) {
-            immediate = {};
-
-            vars[vname].unshift(new RequiredRule());
-            
-            immediate[vname] = vars[vname];
-            ret[vname] = new Validator(immediate);
-        }
-
-        return ret;
-    };
+            weight: this[c].prototype.weight
+        }; return n; 
+    }),
+    buildVariableDefinition = require('../util/buildVariableDefinition');
 
 var QuestController = Class.bind(null, 'QuestController', Object);
 
@@ -96,7 +84,7 @@ module.exports = QuestController({
             }
         );
 
-        router.registerPath('PUT', '/level/{LEVEL_ID}/{ACTION}',
+        router.registerPath( 'GET', '/level/{LEVEL_ID}/status',
             {
                 requests: [
                     {
@@ -106,13 +94,35 @@ module.exports = QuestController({
                         }),
                         body: new Validator({}),
                         resolver: [
-                            UserResolver, LevelResolver//, ActionResolver
+                            UserResolver, LevelResolver
+                        ],
+                        // TODO: implement
+                        callback: this.handleGetLevelInformation.bind(this)
+                    },
+                ],
+                variables: buildVariableDefinition({
+                    'LEVEL_ID': [ new IntegerRule() ],
+                }),
+            }
+        );
+
+        router.registerPath('PUT', '/player/{PLAYER_ID}/{ACTION}',
+            {
+                requests: [
+                    {
+                        headers: new Validator({
+                            'content-type': new EnumRule([ 'application/json' ]),
+                            'x-token': new RequiredRule(),
+                        }),
+                        body: new Validator({}),
+                        resolver: [
+                            UserResolver, LevelResolver, PlayerResolver//, ActionResolver
                         ],
                         callback: this.handleAction.bind(this),
                     }
                 ],
                 variables: buildVariableDefinition({
-                    'LEVEL_ID': [ new IntegerRule() ],
+                    'PLAYER_ID': [ new IntegerRule() ],
                     'ACTION': [ ],
                 }),
             }
@@ -123,9 +133,13 @@ module.exports = QuestController({
         var layout = request.level.map.definition.slice(0),
             position;
 
-        if (request.user.player) {
-            position = request.user.player.position;
-            layout[position.y] = layout[position.y].replaceAt(position.x, 'P');
+        // Replace player positions.
+        if (request.user.players) {
+            for (var i = 0, max = request.user.players.length; i < max; i += 1) {
+                position = request.user.players[i].position;
+                layout[position.y] = layout[position.y].replaceAt(position.x, i.toString());
+            }
+            console.log(layout);
         }
 
         request.sendResponse({
@@ -136,32 +150,39 @@ module.exports = QuestController({
         });
     },
     handleStartLevel: function (request) {
-        if (request.user.player) {
+        var wait;
+
+        if (request.user.players) {
             request.sendResponse({
                 error: 'already started!'
             });
             return;
         }
 
-        request.user.player = new Player(request.level.start);
-//        request.user.level_metadata[request.variables.LEVEL_ID] = {
-//            started: new Date(),
-//            finished: null,
-//            points: null,
-//            num_fails: 0,
-//        };
-        request.user.level_metadata[request.variables.LEVEL_ID] = 
-            UserRepository.createMetadata(request.user, request.variables.LEVEL_ID, cb);
+        // Initialize Players
+        request.user.players = new Array(request.level.start.length);
+        for (var i = 0, max = request.level.start.length; i < max; i += 1) {
+            request.user.players[i] = new Player(request.level.start[i]);
+        }
+        //UserRepository.savePlayers(request.user, request.user.players);
+
+        // Store level as current for that user
+        request.user.current_level = request.level;
+
+        // Create a new metadata entry for that level for that user
+        UserRepository.createMetadata(request.user, request.variables.LEVEL_ID);
 
         request.sendSuccess();
     },
     handleAction: function (request) {
-        if (! request.user.player) {
+        if (! request.player) {
             request.sendUnauthorized();
             return;
         }
 
-        if (request.level.processAction(request.user.player, request.variables.ACTION)) {
+        // Let the level itself process the action, as different actions are possible
+        // in different levels.
+        if (request.level.processAction(request.player, request.variables.ACTION)) {
             request.sendSuccess();
         } else {
             request.sendResponse({
@@ -170,22 +191,34 @@ module.exports = QuestController({
         }
     },
     handleEndLevel: function (request) {
-        if (! request.user.player) {
-            request.sendUnauthorized();
+        if (! request.user.players) {
+            return request.sendUnauthorized();
         }
 
-        if (request.level.isFinished(request.user.player)) {
-            request.user.player = null;
+        // Check if winning conditions are met
+        if (request.level.isFinished(request.user.players)) {
+
+            // Clean players
+            request.user.players = null;
+
             request.user.level_metadata[request.variables.LEVEL_ID].finished = new Date();
-            request.sendSuccess();
+
+            // Update metadata with finishing time and fails
+            UserRepository.updateMetadata(request.user, request.variables.LEVEL_ID, 
+                request.user.level_metadata[request.variables.LEVEL_ID]);
+
+            request.sendResponse({
+                result: 'level cleared!'
+            });
+
+        // If not, we update the failcount and return
         } else {
-            // TODO: add penalty
-            // request.user.player.time += 4;
-            
+            // TODO: maybe store in database?
+            request.user.level_metadata[request.variables.LEVEL_ID].num_fails += 1;
+
             request.sendResponse({
                 error: 'goal not met!'
             });
         }
-
     },
 });

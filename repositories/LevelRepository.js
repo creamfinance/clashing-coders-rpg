@@ -1,32 +1,41 @@
 var WorldMap = require('../game/map'),
+    waiter = require('../util/waiter'),
     fs = require('fs');
 
-var level_definitions = {
-    1: require('../levels/1'),
-};
-
 module.exports = {
+    levels: {
+        1: require('../levels/1'),
+        2: require('../levels/2'),
+    },
     get: function (level_num) {
-        return level_definitions[level_num];
+        return this.levels[level_num];
     },
     load: function (cb) {
-        var waiter = (function (count, cb) {
-            var i = 0; return function () { if (++i == count) { cb(); } };
-        }(1, cb));
+        var wait = waiter(Object.keys(this.levels).length, function () {
+                console.log('finished loading maps'); 
+                console.log(that.levels);
+                cb();
 
-        fs.readFile('levels/1.txt', 'utf8', function (err, data) {
-            var data;
+            }),
+            that = this;
 
-            if (err) {
-                cb(err);
-                return;
-            }
+        for (var level_id in this.levels) {
+            (function (level_id) {
+                fs.readFile('levels/' + level_id + '.txt', 'utf8', function (err, data) {
+                    var data;
 
-            data = data.split('\n');
-            data.pop();
+                    if (err) {
+                        cb(err);
+                        return;
+                    }
 
-            level_definitions[1].map = new WorldMap(data);
-            waiter();
-        });
+                    data = data.split('\n');
+                    data.pop();
+
+                    that.levels[level_id].map = new WorldMap(data);
+                    wait();
+                });
+            }(level_id));
+        }
     },
 };

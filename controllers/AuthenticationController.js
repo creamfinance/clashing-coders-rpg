@@ -2,7 +2,8 @@ var Class = require('class'),
     bcrypt = require('bcrypt'),
     crypto = require('crypto'),
     pool = require('../pool'),
-    redis = require('../redis');
+    redis = require('../redis'),
+    users = require('../users');
 
 var AuthenticationController = Class.bind(null, 'AuthenticationController', Object);
 
@@ -52,17 +53,16 @@ module.exports = AuthenticationController({
                     if (user) {
                         bcrypt.compare(data.password, user.password, function (err, res) {
                             if ( ! err && res === true) {
+                                users.users[user.id] = user;
+
                                 var access_token = new Buffer(
                                     user.id + '-' 
                                     + Date.now() 
                                     + '-' + crypto.randomBytes(16).toString('hex')
                                 ).toString('base64');
-                                var access_token_data = {
-                                    id: user.id
-                                };
 
                                 // save access token to redis
-                                redis.set(access_token, JSON.stringify(access_token_data), function (err, result) {
+                                redis.set(access_token, user.id, function (err, result) {
                                     if (err) {
                                         console.log('ERROR')
                                         request.log(err);
