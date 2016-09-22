@@ -6,9 +6,22 @@ Leaderboard
 
 {% block content %}
 <h1>Leaderboard {% if level %}- Level {{ level }}{% endif %}</h1>
-<ol>
-    {% for user in users %}
-    <li>{{ user.level }} - {{ user.time }} - {{ user.user }}</li>
-    {% endfor %}
-</ol>
+
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>Level</td>
+                <td>Player</td>
+                <td>Time</td>
+        </thead>
+        {% for user in users %}
+        <tbody>
+            <tr>
+                <td>{{user.level}}</td><td>{{user.user}}</td><td>{{user.time}}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}

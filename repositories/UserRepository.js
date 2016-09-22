@@ -139,7 +139,6 @@ module.exports = {
             client.query('SELECT user_id, username, max(level_id) as level, max(finished) - (date(now()) + interval \'12 hours\') as total_time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE finished IS NOT NULL GROUP BY user_id, username ORDER BY level desc, total_time', [],
                 function (err, result) {
                     if (err) { console.log(err); }
-                    console.log(result.rows);
 
                     cb(result.rows.map(function (obj) { return {
                         user: obj.username,

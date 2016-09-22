@@ -106,14 +106,6 @@ module.exports = AdminController({
                         ],
                         callback: this.handleGetUserInformation.bind(this)
                     },
-                    {
-                        headers: new Validator({}),
-                        body: new Validator({}),
-                        resolver: [
-                            TokenResolver, UserResolver
-                        ],
-                        callback: this.handleShowUser.bind(this)
-                    },
                 ],
                 variables: buildVariableDefinition({
                     'TOKEN': [ ],
@@ -122,15 +114,7 @@ module.exports = AdminController({
             }
         );
     },
-    /**
-     * 
-     * 
-     * @param request @todo 
-     */
-    handleShowUser: function handleShowUser(request) {
-        request.write(Template.get('user')({ user: request.user }));
-        request.end();
-    },
+
     /**
      * TODO: document
      * 
@@ -172,7 +156,7 @@ module.exports = AdminController({
     handleCheckIn: function handleCheckIn(request) {
         var that = this;
         UserRepository.checkIn(request.user, function () {
-            that.handleShowUser(request);
+            that.handleListUsers(request);
         });
     },
 

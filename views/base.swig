@@ -2,9 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    {% block content %}{% endblock %}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>
