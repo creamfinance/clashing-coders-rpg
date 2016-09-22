@@ -51,33 +51,29 @@ module.exports = AuthenticationController({
                     done();
 
                     if (user) {
-                        bcrypt.compare(data.password, user.password, function (err, res) {
-                            if ( ! err && res === true) {
-                                users.users[user.id] = user;
+                        if (data.password === user.password) {
+                            users.users[user.id] = user;
 
-                                var access_token = new Buffer(
-                                    user.id + '-' 
-                                    + Date.now() 
-                                    + '-' + crypto.randomBytes(16).toString('hex')
-                                ).toString('base64');
+                            var access_token = new Buffer(
+                                user.id + '-' 
+                                + Date.now() 
+                                + '-' + crypto.randomBytes(16).toString('hex')
+                            ).toString('base64');
 
-                                // save access token to redis
-                                redis.set(access_token, user.id, function (err, result) {
-                                    if (err) {
-                                        console.log('ERROR')
-                                        request.log(err);
-                                        request.appendInfo('Redis error: ' + err);
-                                        return request.sendInternalServerError();
-                                    }
+                            // save access token to redis
+                            redis.set(access_token, user.id, function (err, result) {
+                                if (err) {
+                                    console.log('ERROR')
+                                    request.log(err);
+                                    request.appendInfo('Redis error: ' + err);
+                                    return request.sendInternalServerError();
+                                }
 
-                                    request.sendResponse({
-                                        access_token: access_token
-                                    });
+                                request.sendResponse({
+                                    access_token: access_token
                                 });
-                            } else {
-                                return request.sendUnauthorized();
-                            }
-                        });
+                            });
+                        }
                     } else {
                         return request.sendUnauthorized();
                     }

@@ -152,27 +152,36 @@ module.exports = QuestController({
     handleStartLevel: function (request) {
         var wait;
 
-        if (request.user.players) {
+        /*if (request.user.players) {
             request.sendResponse({
                 error: 'already started!'
             });
             return;
+        }*/
+
+        // Only allow starting the level if the level has not been finished already
+        if (!(request.variables.LEVEL_ID in request.user.level_metadata) ||
+            request.user.level_metadata[request.variables.LEVEL_ID].finished === null) {
+
+            // Initialize Players
+            request.user.players = new Array(request.level.start.length);
+            for (var i = 0, max = request.level.start.length; i < max; i += 1) {
+                request.user.players[i] = new Player(request.level.start[i]);
+            }
+            //UserRepository.savePlayers(request.user, request.user.players);
+
+            // Store level as current for that user
+            request.user.current_level = request.level;
+
+            // Create a new metadata entry for that level for that user
+            UserRepository.createMetadata(request.user, request.variables.LEVEL_ID);
+
+            request.sendSuccess();
+        } else {
+            request.sendResponse({
+                error: 'You already cleared this level!'
+            });
         }
-
-        // Initialize Players
-        request.user.players = new Array(request.level.start.length);
-        for (var i = 0, max = request.level.start.length; i < max; i += 1) {
-            request.user.players[i] = new Player(request.level.start[i]);
-        }
-        //UserRepository.savePlayers(request.user, request.user.players);
-
-        // Store level as current for that user
-        request.user.current_level = request.level;
-
-        // Create a new metadata entry for that level for that user
-        UserRepository.createMetadata(request.user, request.variables.LEVEL_ID);
-
-        request.sendSuccess();
     },
     handleAction: function (request) {
         if (! request.player) {

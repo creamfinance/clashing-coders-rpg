@@ -8,7 +8,7 @@ Leaderboard
 <h1>Leaderboard {% if level %}- Level {{ level }}{% endif %}</h1>
 <ol>
     {% for user in users %}
-    <li>{{ user.time }} - {{ user.user }}</li>
+    <li>{{ user.level }} - {{ user.time }} - {{ user.user }}</li>
     {% endfor %}
 </ol>
 {% endblock %}
