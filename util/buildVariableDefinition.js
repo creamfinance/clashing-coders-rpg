@@ -1,6 +1,6 @@
 module.exports = function (vars) {
     var ret = {},
-        immediate = {};
+        immediate;
 
     for (var vname in vars) {
         immediate = {};

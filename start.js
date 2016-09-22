@@ -13,6 +13,7 @@ require('./bootstrap')(function () {
     new (require('./controllers/AuthenticationController'))().registerRouter(router);
     new (require('./controllers/QuestController'))().registerRouter(router);
     new (require('./controllers/MetagameController'))().registerRouter(router);
+    new (require('./controllers/AdminController'))().registerRouter(router);
 
     var webserver = new HttpHandler({
         requestclass: MoreAdvancedRequest,

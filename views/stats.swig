@@ -5,7 +5,7 @@ Leaderboard
 {% endblock %}
 
 {% block content %}
-<h1>Leaderboard</h1>
+<h1>Leaderboard {% if level %}- Level {{ level }}{% endif %}</h1>
 <ol>
     {% for user in users %}
     <li>{{ user.time }} - {{ user.user }}</li>

@@ -47,7 +47,7 @@ module.exports = MetagameController({
                         headers: new Validator({ }),
                         body: new Validator({}),
                         resolver: [ ],
-                        callback: this.handleGetStatsForLevel.bind(this),
+                        callback: this.handleGetStatsForLevelView.bind(this),
                     },
                 ],
                 variables: buildVariableDefinition({
@@ -56,6 +56,7 @@ module.exports = MetagameController({
             }
         );
     },
+
     /**
      * TODO: document
      * 
@@ -66,6 +67,7 @@ module.exports = MetagameController({
             request.sendResponse(result);
         });
     },
+
     /**
      * TODO: document
      * 
@@ -89,4 +91,15 @@ module.exports = MetagameController({
         });
     },
     
+    /**
+     * TODO: document
+     * 
+     * @param request @todo 
+     */
+    handleGetStatsForLevelView: function handleGetStatsForLevel(request) {
+        UserRepository.getStatsForLevel(request.variables.LEVEL_ID, function (result) {
+            request.write(Templates.get('stats')({ users: result, level: request.variables.LEVEL_ID }));
+            request.end();
+        });
+    },
 });

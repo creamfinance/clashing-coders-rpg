@@ -1,4 +1,9 @@
 var Class = require('class'),
+    TokenResolver = require('../resolvers/TokenResolver'),
+    UserResolver = require('../resolvers/UserResolver'),
+    Template = require('../templates'),
+    randomstring = require('randomstring'),
+    UserRepository = require('../repositories/UserRepository'),
     buildVariableDefinition = require('../util/buildVariableDefinition');
 
 var AdminController = Class.bind(null, 'AdminController', Object);
@@ -13,9 +18,94 @@ module.exports = AdminController({
      * @param router @todo 
      */
     registerRouter: function registerRouter(router) {
-        router.registerPath('GET', '/admin/{TOKEN}/{USER_ID}',
+        router.registerPath('POST', '/admin/{TOKEN}/register',
             {
                 requests: [
+                    {
+                        headers: new Validator({}),
+                        body: new Validator({
+                            'username': new RequiredRule()
+                        }),
+                        resolver: [
+                            TokenResolver
+                        ],
+                        callback: this.handleRegisterUser.bind(this)
+                    },
+                ],
+                variables: buildVariableDefinition({
+                    'TOKEN': [ ],
+                }),
+            }
+        );
+
+        router.registerPath('GET', '/admin/{TOKEN}/users',
+            {
+                requests: [
+                    {
+                        headers: new Validator({}),
+                        body: new Validator({}),
+                        resolver: [
+                            TokenResolver
+                        ],
+                        callback: this.handleListUsers.bind(this)
+                    },
+                ],
+                variables: buildVariableDefinition({
+                    'TOKEN': [ ],
+                }),
+            }
+        );
+
+        router.registerPath('POST', '/admin/{TOKEN}/checkin/{USER_ID}',
+            {
+                requests: [
+                    {
+                        headers: new Validator({}),
+                        body: new Validator({}),
+                        resolver: [
+                            TokenResolver, UserResolver
+                        ],
+                        callback: this.handleCheckIn.bind(this)
+                    },
+                ],
+                variables: buildVariableDefinition({
+                    'TOKEN': [ ],
+                    'USER_ID': [ new IntegerRule() ],
+                }),
+            }
+        );
+
+        router.registerPath('GET', '/admin/{TOKEN}/register',
+            {
+                requests: [
+                    {
+                        headers: new Validator({}),
+                        body: new Validator({}),
+                        resolver: [
+                            TokenResolver
+                        ],
+                        callback: this.handleShowRegistrationPage.bind(this)
+                    },
+                ],
+                variables: buildVariableDefinition({
+                    'TOKEN': [ ],
+                }),
+            }
+        );
+
+        router.registerPath('GET', '/admin/{TOKEN}/user/{USER_ID}',
+            {
+                requests: [
+                    {
+                        headers: new Validator({
+                            'content-type': new EnumRule([ 'application/json' ]),
+                        }),
+                        body: new Validator({}),
+                        resolver: [
+                            TokenResolver, UserResolver
+                        ],
+                        callback: this.handleGetUserInformation.bind(this)
+                    },
                     {
                         headers: new Validator({}),
                         body: new Validator({}),
@@ -31,57 +121,6 @@ module.exports = AdminController({
                 }),
             }
         );
-
-        router.registerPath('POST', '/admin/{TOKEN}/register',
-            {
-                requests: [
-                        headers: new Validator({}),
-                        body: new Validator({
-                            'username': new RequiredRule(),
-                            'password': new RequiredRule()
-                        }),
-                        resolver: [
-                            TokenResolver
-                        ],
-                        callback: this.handleRegisterUser.bind(this)
-                ],
-                variables: buildVariableDefinition({
-                    'TOKEN': [ ],
-                }),
-            }
-        );
-
-        router.registerPath('GET', '/admin/{TOKEN}/register',
-            {
-                requests: [
-                    headers: new Validator({}),
-                    body: new Validator({}),
-                    resolver: [
-                        TokenResolver
-                    ],
-                    callback: this.handleShowRegistrationPage.bind(this)
-                ],
-                variables: buildVariableDefinition({
-                    'TOKEN': [ ],
-                }),
-            }
-        );
-
-        router.registerPath('GET', '/admin/{TOKEN}/users',
-            {
-                requests: [
-                    headers: new Validator({}),
-                    body: new Validator({}),
-                    resolver: [
-                        TokenResolver
-                    ],
-                    callback: this.handleListUsers.bind(this)
-                ],
-                variables: buildVariableDefinition({
-                    'TOKEN': [ ],
-                }),
-            }
-        );
     },
     /**
      * 
@@ -89,8 +128,8 @@ module.exports = AdminController({
      * @param request @todo 
      */
     handleShowUser: function handleShowUser(request) {
-        // request.user
-        //
+        request.write(Template.get('user')({ user: request.user }));
+        request.end();
     },
     /**
      * TODO: document
@@ -101,6 +140,10 @@ module.exports = AdminController({
          // TODO: implement
         // store in DB
         // TODO: reload users in interval in repo
+        UserRepository.create(request.post.username, randomstring.generate(12), request.post.email, function (user) {
+            request.write(Template.get('user')({ user: user }));
+            request.end();
+        });
     },
     /**
      * TODO: document
@@ -108,7 +151,8 @@ module.exports = AdminController({
      * @param request @todo 
      */
     handleShowRegistrationPage: function handleShowRegistrationPage(request) {
-         // TODO: implement
+        request.write(Template.get('register')({ token: request.token }));
+        request.end();
     },
     /**
      * TODO: document
@@ -116,6 +160,28 @@ module.exports = AdminController({
      * @param request @todo 
      */
     handleListUsers: function handleListUsers(request) {
-         // TODO: implement
+        request.write(Template.get('users')({ token: request.token, users: UserRepository.users }));
+        request.end();
+    },
+
+    /**
+     * TODO: document
+     * 
+     * @param request @todo 
+     */
+    handleCheckIn: function handleCheckIn(request) {
+        var that = this;
+        UserRepository.checkIn(request.user, function () {
+            that.handleShowUser(request);
+        });
+    },
+
+    /**
+     * TODO: document
+     * 
+     * @param request @todo 
+     */
+    handleGetUserInformation: function handleGetUserInformation(request) {
+        request.sendResponse(request.user); 
     },
 });

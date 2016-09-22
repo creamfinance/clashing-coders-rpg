@@ -38,6 +38,49 @@ module.exports = {
     get: function (user_id) {
         return this.users[user_id]; 
     },
+    /**
+     * TODO: document
+     * 
+     * @param user @todo 
+     */
+    checkIn: function checkIn(user, cb) {
+        pool.connect(function (err, client, done) {
+            if (err) { cb(err); }
+
+            client.query('UPDATE users SET checked_in = TRUE WHERE id = $1', [user.id], function (err, result) {
+                if (err) { cb(err); }
+
+                done();
+                user.checked_in = true;
+                cb();
+            });
+        });
+    },
+
+    /**
+     * TODO: document
+     * 
+     * @param username @todo
+     * @param password @todo 
+     */
+    create: function create(username, password, email, cb) {
+        var that = this;
+        pool.connect(function (err, client, done) {
+            if (err) { cb(err); }
+
+            client.query('INSERT INTO users(username, password, email, checked_in) VALUES($1, $2, $3, TRUE) RETURNING *', [username, password, email], function (err, result) {
+                if (err) { cb(err); }
+
+                var user = result.rows[0];
+                that.users[user.id] = user;
+
+                done();
+                cb(user);
+            });
+        });
+    },
+    
+    
     createMetadata: function (user, level_id) {
         var d = new Date(),
             metadata = {

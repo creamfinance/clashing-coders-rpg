@@ -3,19 +3,26 @@ var redis = require('../redis'),
     Player = require('../game/player');
 
 module.exports = function UserResolver(request, next) {
-    redis.get(request.req.headers['x-token'], function (err, data) {
-        if (err) {
-            request.log(err);
-            request.appendInfo('Redis error');
-            return request.sendUnauthorized();
-        }
+    if ('x-token' in request.req.headers) {
+        redis.get(request.req.headers['x-token'], function (err, data) {
+            if (err) {
+                request.log(err);
+                request.appendInfo('Redis error');
+                return request.sendUnauthorized();
+            }
 
-        if (!data) {
-            request.appendInfo('Token not found');
-            return request.sendUnauthorized();
-        }
+            if (!data) {
+                request.appendInfo('Token not found');
+                return request.sendUnauthorized();
+            }
 
-        request.user = users.users[data];
+            request.user = users.users[data];
+            next();
+        });
+    } else if ('USER_ID' in request.variables) {
+        request.user = users.users[request.variables.USER_ID];
         next();
-    });
+    } else {
+        return request.sendUnauthorized();
+    }
 };

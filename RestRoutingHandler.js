@@ -300,20 +300,20 @@ module.exports = RestRoutingHandler({
                 var validateBody = function (requestConfig, callback) {
                     // if there's a body validator defined, load the body
                     var body = requestConfig.body;
+                    var validateInnerBody = function () {
+                        body.validate(request.post, function (context, result) {
+
+                            if (result) {
+                                callback(null, context);
+                            } else {
+                                callback(new BaseMessageException('Body validation failed'), context);
+                            }
+                        });
+                    };
 
                     if (body && request.req.headers[contentType] &&
                         request.req.headers[contentType].indexOf('application/json') === 0) {
 
-                        var validateInnerBody = function () {
-                            body.validate(request.post, function (context, result) {
-
-                                if (result) {
-                                    callback(null, context);
-                                } else {
-                                    callback(new BaseMessageException('Body validation failed'), context);
-                                }
-                            });
-                        };
 
                         if (request.parsedData) {
                             validateInnerBody();
@@ -325,8 +325,18 @@ module.exports = RestRoutingHandler({
                                 validateInnerBody();
                             });
                         }
+                    } else if (request.canParsePostData()) {
+                        if (request.parsedData) {
+                            validateInnerBody();
+                        } else {
+                            request.parsePostData(function (failed, err) {
+                                request.data = null;
+                                request.parsedData = true;
+
+                                validateInnerBody();             
+                            });
+                        }
                     } else {
-                        //callback(new Error('Body is not application/json'));
                         callback();
                     }
                 };
