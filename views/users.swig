@@ -7,6 +7,9 @@ Users
 {% block content %}
 <h1>Users</h1>
 <div class="row">
+    <a href="/admin/{{token}}/register" class="btn btn-primary">Register</a>
+</div>
+<div class="row">
     <table class="table table-striped table-condensed">
         <thead>
             <tr>

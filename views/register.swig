@@ -29,4 +29,7 @@ New User
     </div>
 </form>
 </div>
+<div class="row">
+    <a href="/admin/{{token}}/users" class="btn btn-primary">Return</a>
+</div>
 {% endblock %}
