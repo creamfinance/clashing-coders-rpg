@@ -160,9 +160,10 @@ module.exports = {
         pool.connect(function (err, client, done) {
             if (err) { console.log(err); }
 
-            client.query('SELECT user_id, username, finished - (date(now()) + interval \'12 hours\') as time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE level_id = $1 ORDER BY time', [ level_id],
+            client.query('SELECT user_id, username, coalesce(finished, now()) - (date(now()) + interval \'12 hours\') as time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE level_id = $1 ORDER BY time', [ level_id],
                 function (err, result) {
                     if (err) console.log(err);
+                    console.log(result.rows);
 
 
                     cb(result.rows.map(function (obj) { return {
