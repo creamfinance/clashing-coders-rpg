@@ -172,8 +172,7 @@ module.exports = QuestController({
 
         // Let the level itself process the action, as different actions are possible
         // in different levels.
-        if (request.level.processAction(request.player, request.variables.ACTION)) {
-            console.log(request.level.players, request.user.players, request.player);
+        if (request.level.processAction(request.player, request.variables.ACTION, request.post)) {
             request.sendSuccess();
         } else {
             request.sendResponse({
@@ -191,6 +190,7 @@ module.exports = QuestController({
 
             // Clean players
             request.user.players = null;
+            request.user.current_level = null;
 
             request.user.level_metadata[request.variables.LEVEL_ID].finished = new Date();
 

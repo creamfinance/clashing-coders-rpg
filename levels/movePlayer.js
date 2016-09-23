@@ -1,25 +1,28 @@
-module.exports = function (player, direction) {
-    var position = {x: player.position.x, y: player.position.y};
+module.exports = function (player, direction, options) {
+    var position = {x: player.position.x, y: player.position.y},
+        steps = options.steps || 1;
 
-    switch (direction.toLowerCase()) {
-        case 'up':
-            position.y -= 1;
-            break;
-        case 'down':
-            position.y += 1;
-            break;
-        case 'left':
-            position.x -= 1;
-            break;
-        case 'right':
-            position.x += 1;
-            break;
-    }
+    for (var i = 0; i < steps; i += 1) {
+        switch (direction.toLowerCase()) {
+            case 'up':
+                position.y -= 1;
+                break;
+            case 'down':
+                position.y += 1;
+                break;
+            case 'left':
+                position.x -= 1;
+                break;
+            case 'right':
+                position.x += 1;
+                break;
+        }
 
-    if (this.map[position.y][position.x].traversable) {
-        player.position = position;
-        return true;
-    } else {
-        return false;
+        if (position.x >= 0 && position.y >= 0 && this.map[position.y][position.x].traversable) {
+            player.position.x = position.x;
+            player.position.y = position.y;
+        } else {
+            break;
+        }
     }
 };

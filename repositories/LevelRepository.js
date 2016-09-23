@@ -26,6 +26,7 @@ module.exports = {
                     }
 
                     that.levels[level_id].map_definition = new MapDefinition(JSON.parse(data));
+                    that.levels[level_id].id = level_id;
                     wait();
                 });
             }(level_id));

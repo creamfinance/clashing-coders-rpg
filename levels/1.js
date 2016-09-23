@@ -8,13 +8,15 @@ module.exports = {
         return players[0].position.x == 8 && players[0].position.y == 1 &&
             players[1].position.x == 1 && players[1].position.y == 1;
     },
-    processAction: function (player, action) {
+    processAction: function (player, action, options) {
+        options = options || {};
+
         switch (action.toLowerCase()) {
             case 'up':
             case 'down':
             case 'left':
             case 'right':
-                this.movePlayer(player, action);
+                this.movePlayer(player, action, options);
                 return true;
             default:
                 return false;
