@@ -6,6 +6,7 @@ var Class = require('class'),
     Player = require('../game/player'),
     waiter = require('../util/waiter'),
     UserRepository = require('../repositories/UserRepository'),
+    tiles = require('../game/tiles'),
     tiles_map = require('../game/tiles').map(function (n, c) { 
         n[this[c].prototype.display] = {
             name: c,
@@ -130,45 +131,25 @@ module.exports = QuestController({
 
     },
     handleGetLevelInformation: function (request) {
-        var layout = request.level.map.definition.slice(0),
-            position;
-
-        // Replace player positions.
-        if (request.user.players) {
-            for (var i = 0, max = request.user.players.length; i < max; i += 1) {
-                position = request.user.players[i].position;
-                layout[position.y] = layout[position.y].replaceAt(position.x, i.toString());
-            }
-            console.log(layout);
-        }
+        var level = request.user.current_level || request.level;
 
         request.sendResponse({
-            width: request.level.map.width,
-            height: request.level.map.height,
-            tileset: tiles_map,
-            layout: layout.join('\n'),
+            width: level.width,
+            height: level.height,
+            tileset: tiles,
+            map: level.map,
+            players: level.players,
         });
     },
     handleStartLevel: function (request) {
         var wait;
-
-        /*if (request.user.players) {
-            request.sendResponse({
-                error: 'already started!'
-            });
-            return;
-        }*/
 
         // Only allow starting the level if the level has not been finished already
         if (!(request.variables.LEVEL_ID in request.user.level_metadata) ||
             request.user.level_metadata[request.variables.LEVEL_ID].finished === null) {
 
             // Initialize Players
-            request.user.players = new Array(request.level.start.length);
-            for (var i = 0, max = request.level.start.length; i < max; i += 1) {
-                request.user.players[i] = new Player(request.level.start[i]);
-            }
-            //UserRepository.savePlayers(request.user, request.user.players);
+            request.user.players = request.level.players;
 
             // Store level as current for that user
             request.user.current_level = request.level;
@@ -192,6 +173,7 @@ module.exports = QuestController({
         // Let the level itself process the action, as different actions are possible
         // in different levels.
         if (request.level.processAction(request.player, request.variables.ACTION)) {
+            console.log(request.level.players, request.user.players, request.player);
             request.sendSuccess();
         } else {
             request.sendResponse({

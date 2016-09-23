@@ -1,5 +1,8 @@
 module.exports = {
-    start: [{x:3, y:3}, { x:1, y:1 }, { x:3, y:8 }],
+    init: function () {
+
+    },
+    player_definition: [{x:3, y:3}, { x:1, y:1 }, { x:3, y:8 }],
     isFinished: function (players) {
         //var fin = false;
         return players[0].position.x == 8 && players[0].position.y == 1 &&

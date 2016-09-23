@@ -1,21 +1,19 @@
 var id = 0;
 
-function TileDefinition(display, options) {
-    var t = function () {
-
+function TileDefinition(name, options) {
+    var t = function Tile() {
+        this.object = null;
+        this.type = name;
+        this.traversable = options.traversable === true;
     }
 
     t.prototype.id = id++;
-    t.prototype.display = display;
-
-    t.prototype.weight = options.weight || 1;
-    t.prototype.traversable = options.traversable === true;
-
     return t;
 }
 
-module.exports = {
-    'wall': new TileDefinition('#', { weight: 0, traversable: false }),
-    'land': new TileDefinition('.', { weight: 1, traversable: true }),
-    'forest': new TileDefinition('T', { weight: 1.5, traversable: true})
+var x = module.exports = {
+    1035: new TileDefinition('wall', { traversable: false }),
+    353: new TileDefinition('flat', { traversable: true }),
+    453: new TileDefinition('road', { traversable: true }),
+    //'forest': new TileDefinition('T', { traversable: true })
 }

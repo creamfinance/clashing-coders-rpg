@@ -16,9 +16,8 @@ module.exports = function (player, direction) {
             break;
     }
 
-    if (this.map.tileset[position.y][position.x].traversable) {
+    if (this.map[position.y][position.x].traversable) {
         player.position = position;
-        player.time += this.map.tileset[position.y][position.x].weight;
         return true;
     } else {
         return false;
