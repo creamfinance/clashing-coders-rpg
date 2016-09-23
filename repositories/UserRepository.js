@@ -138,6 +138,8 @@ module.exports = {
 
             client.query('SELECT user_id, username, max(level_id) as level, max(finished) - (date(now()) + interval \'12 hours\') as total_time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE finished IS NOT NULL GROUP BY user_id, username ORDER BY level desc, total_time', [],
                 function (err, result) {
+                    done();
+
                     if (err) { console.log(err); }
 
                     cb(result.rows.map(function (obj) { return {
@@ -146,7 +148,6 @@ module.exports = {
                         time: ~~obj.total_time.hours + ':' + ~~obj.total_time.minutes + ':' + ~~obj.total_time.seconds, 
                     }; }));
                     
-                    done();
                 }
             );
         });
@@ -162,9 +163,9 @@ module.exports = {
 
             client.query('SELECT user_id, username, coalesce(finished, now()) - (date(now()) + interval \'12 hours\') as time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE level_id = $1 ORDER BY time', [ level_id],
                 function (err, result) {
-                    if (err) console.log(err);
-                    console.log(result.rows);
+                    done();
 
+                    if (err) console.log(err);
 
                     cb(result.rows.map(function (obj) { return {
                         user: obj.username,
@@ -175,5 +176,23 @@ module.exports = {
         });
     },
     
-    
+    /**
+     * TODO: document
+     * 
+     * @param user @todo 
+     */
+    fail: function fail(user, level_id) {
+        pool.connect(function (err, client, done) {
+            if (err) { console.log(err); }
+
+            client.query('UPDATE level_metadata SET times_failed = times_failed + 1 WHERE user_id = $1 AND level_id = $2', [user.id, level_id],
+                function (err, result) {
+                    done();
+
+                    if (err) console.log(err);
+                }
+            );
+        });
+    },
+        
 };

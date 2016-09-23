@@ -204,7 +204,7 @@ module.exports = QuestController({
 
         // If not, we update the failcount and return
         } else {
-            // TODO: maybe store in database?
+            UserRepository.fail(request.user, request.variables.LEVEL_ID);
             request.user.level_metadata[request.variables.LEVEL_ID].num_fails += 1;
 
             request.sendResponse({
