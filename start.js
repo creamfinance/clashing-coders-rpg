@@ -15,9 +15,10 @@ require('./bootstrap')(function () {
     new (require('./controllers/MetagameController'))().registerRouter(router);
     new (require('./controllers/AdminController'))().registerRouter(router);
 
+    var port = process.env['CCC_PORT'] || 8888;
     var webserver = new HttpHandler({
         requestclass: MoreAdvancedRequest,
-        port: 8888,
+        port: port
     });
 
 /*    webserver.registerMiddleware(new RateLimitMiddleware({
