@@ -136,7 +136,7 @@ module.exports = QuestController({
         request.sendResponse({
             width: level.width,
             height: level.height,
-            tileset: tiles,
+            tileset: level.tileset,
             map: level.map,
             players: level.players,
         });
