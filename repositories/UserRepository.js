@@ -8,10 +8,11 @@ module.exports = {
         var that = this;
 
         pool.connect(function (err, client, done) {
-            if (err) { cb(err); return; }
+            if (err) { console.log(err); return cb(err); }
 
-            client.query('SELECT * FROM users', [], function (err, result) {
-                if (err) { cb(err); }
+            client.query('SELECT * FROM public.users', [], function (err, result) {
+
+                if (err) { console.log(err); return cb(err); }
 
                 if (result.rows.length > 0) {
                     var wait = waiter(result.rows.length, cb);
@@ -20,7 +21,7 @@ module.exports = {
                         that.users[result.rows[i].id] = result.rows[i];
                         that.users[result.rows[i].id].level_metadata = {};
 
-                        client.query('SELECT * FROM level_metadata WHERE user_id = $1', 
+                        client.query('SELECT * FROM level_metadata WHERE user_id = $1',
                             [ result.rows[i].id ], function (err, result) {
 
                             if (err) { cb(err); return; }
@@ -40,12 +41,19 @@ module.exports = {
         });
     },
     get: function (user_id) {
-        return this.users[user_id]; 
+        return this.users[user_id];
+    },
+    getWithEmail: function (email) {
+        for (var id in this.users) {
+            if (this.users[id].email == email) {
+                return this.users[id];
+            }
+        }
     },
     /**
      * TODO: document
-     * 
-     * @param user @todo 
+     *
+     * @param user @todo
      */
     checkIn: function checkIn(user, cb) {
         pool.connect(function (err, client, done) {
@@ -63,9 +71,9 @@ module.exports = {
 
     /**
      * TODO: document
-     * 
+     *
      * @param username @todo
-     * @param password @todo 
+     * @param password @todo
      */
     create: function create(username, password, email, cb) {
         var that = this;
@@ -84,8 +92,8 @@ module.exports = {
             });
         });
     },
-    
-    
+
+
     createMetadata: function (user, level_id) {
         var metadata = {
                 finished: null,
@@ -96,7 +104,7 @@ module.exports = {
             // We just put this out there, no need to wait for it
             pool.connect(function (err, client, done) {
                 if (err) { console.log(err); }
-                
+
                 client.query('INSERT INTO level_metadata(user_id, level_id) VALUES($1, $2)',
                     [user.id, level_id], function (err, result) {
                         if (err) { console.log(err); }
@@ -131,7 +139,7 @@ module.exports = {
     },
     /**
      * TODO: document
-     *  
+     *
      */
     getStats: function getStats(cb) {
         pool.connect(function (err, client, done) {
@@ -146,17 +154,17 @@ module.exports = {
                     cb(result.rows.map(function (obj) { return {
                         user: obj.username,
                         level: obj.level,
-                        time: ~~obj.total_time.hours + ':' + ~~obj.total_time.minutes + ':' + ~~obj.total_time.seconds, 
+                        time: ~~obj.total_time.hours + ':' + ~~obj.total_time.minutes + ':' + ~~obj.total_time.seconds,
                     }; }));
-                    
+
                 }
             );
         });
     },
     /**
      * TODO: document
-     * 
-     * @param level_id @todo 
+     *
+     * @param level_id @todo
      */
     getStatsForLevel: function getStatsForLevel(level_id, cb) {
         pool.connect(function (err, client, done) {
@@ -170,17 +178,17 @@ module.exports = {
 
                     cb(result.rows.map(function (obj) { return {
                         user: obj.username,
-                        time: ~~obj.time.hours + ':' + ~~obj.time.minutes + ':' + ~~obj.time.seconds, 
+                        time: ~~obj.time.hours + ':' + ~~obj.time.minutes + ':' + ~~obj.time.seconds,
                     }; }));
                 }
             );
         });
     },
-    
+
     /**
      * TODO: document
-     * 
-     * @param user @todo 
+     *
+     * @param user @todo
      */
     fail: function fail(user, level_id) {
         pool.connect(function (err, client, done) {

@@ -9,7 +9,7 @@ module.exports = RestRoutingHandler({
     constructor: function () {
         /*
             First level = http method (POST, GET, PATCH, DELETE, HEAD)
-            Second level = 
+            Second level =
 
             {
                 POST: {
@@ -17,12 +17,12 @@ module.exports = RestRoutingHandler({
                         '^': {
                             configuration: {
                             }
-                        } 
+                        }
                     },
                     authorization: {
                         '^': {
                             configuration: {
-    
+
                             }
                         }
                     }
@@ -63,7 +63,7 @@ module.exports = RestRoutingHandler({
     },
     registerController: function (name, instance) {
         name = this.resolveName(name);
-        
+
         this.controllers[name] = instance;
     },
     registerPath: function (method, path, configuration) {
@@ -89,7 +89,7 @@ module.exports = RestRoutingHandler({
         // go through all parts of the supplied path
         for (var i = 0; i < split_path.length; i++) {
             var sub_path = split_path[i];
-            
+
             // if it's a variable, then do special handling
 
             if (variableRegex.test(sub_path)) {
@@ -194,7 +194,9 @@ module.exports = RestRoutingHandler({
                             var variable = currentMethod['$'][var_idx];
 
                             var data = {};
-                            data[variable.name] = sub_path;
+                            data[variable.name] = decodeURIComponent(sub_path);
+
+                            console.log(data);
 
                             variable.validator.validate(data, function (context, result) {
                                 if (result) {
@@ -205,7 +207,7 @@ module.exports = RestRoutingHandler({
                                         request.variables = {};
                                     }
 
-                                    request.variables[variable.name] = sub_path;
+                                    request.variables[variable.name] = decodeURIComponent(sub_path);
 
                                     // check next path part
                                     checkSubPath(idx + 1);
@@ -220,7 +222,7 @@ module.exports = RestRoutingHandler({
                         }
                     }
 
-                    checkVariable(0);                    
+                    checkVariable(0);
                 } else {
                     request.appendInfo('Invalid Path');
                     return request.sendNotFound();
@@ -249,7 +251,7 @@ module.exports = RestRoutingHandler({
 
                         validateHeaders(requestConfig, function (err, context) {
                             validation.push(context);
-                            
+
                             if (err) {
                                 return findValidRequest(idx + 1);
                             }
@@ -265,7 +267,7 @@ module.exports = RestRoutingHandler({
                             });
                         });
                     } else {
-                        
+
                         for (var i = 0; i < validatedContext.length; i++) {
                             for (var x = 0; x < validatedContext[i].length; x++) {
                                 request.log(util.inspect(validatedContext[i][x], { depth: null }));
@@ -333,7 +335,7 @@ module.exports = RestRoutingHandler({
                                 request.data = null;
                                 request.parsedData = true;
 
-                                validateInnerBody();             
+                                validateInnerBody();
                             });
                         }
                     } else {
@@ -342,10 +344,10 @@ module.exports = RestRoutingHandler({
                 };
 
                 var checkForAuthorization = function (requestConfig) {
-                    if (requestConfig.authorization 
+                    if (requestConfig.authorization
                         && requestConfig.authorization instanceof Array
                         && requestConfig.authorization.length > 0) {
-                        
+
                         // handle
                         var handleAuthorization = function (idx) {
                             if (idx < requestConfig.authorization.length) {
@@ -375,7 +377,7 @@ module.exports = RestRoutingHandler({
                             request.authorization = [];
                         }
 
-                        handleAuthorization(0);                        
+                        handleAuthorization(0);
                     } else {
                         callResolvers(requestConfig);
                     }
@@ -385,7 +387,7 @@ module.exports = RestRoutingHandler({
                     if (requestConfig.resolver
                         && requestConfig.resolver instanceof Array
                         && requestConfig.resolver.length > 0) {
-                        
+
                         // handle
                         var handleResolver = function (idx) {
                             if (idx < requestConfig.resolver.length) {
@@ -397,7 +399,7 @@ module.exports = RestRoutingHandler({
                             }
                         };
 
-                        handleResolver(0);  
+                        handleResolver(0);
                     } else {
                         callCallback(requestConfig);
                     }

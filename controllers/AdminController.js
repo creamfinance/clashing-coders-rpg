@@ -10,12 +10,12 @@ var AdminController = Class.bind(null, 'AdminController', Object);
 
 module.exports = AdminController({
     constructor: function () {
-        
+
     },
     /**
      * TODO: document
-     * 
-     * @param router @todo 
+     *
+     * @param router @todo
      */
     registerRouter: function registerRouter(router) {
         router.registerPath('POST', '/admin/{TOKEN}/register',
@@ -93,12 +93,11 @@ module.exports = AdminController({
             }
         );
 
-        router.registerPath('GET', '/admin/{TOKEN}/user/{USER_ID}',
+        router.registerPath('GET', '/admin/{TOKEN}/user/{EMAIL}',
             {
                 requests: [
                     {
                         headers: new Validator({
-                            'content-type': new EnumRule([ 'application/json' ]),
                         }),
                         body: new Validator({}),
                         resolver: [
@@ -109,7 +108,7 @@ module.exports = AdminController({
                 ],
                 variables: buildVariableDefinition({
                     'TOKEN': [ ],
-                    'USER_ID': [ new IntegerRule ]
+                    'EMAIL': [ new EmailRule() ]
                 }),
             }
         );
@@ -117,8 +116,8 @@ module.exports = AdminController({
 
     /**
      * TODO: document
-     * 
-     * @param request @todo 
+     *
+     * @param request @todo
      */
     handleRegisterUser: function handleRegisterUser(request) {
          // TODO: implement
@@ -131,8 +130,8 @@ module.exports = AdminController({
     },
     /**
      * TODO: document
-     * 
-     * @param request @todo 
+     *
+     * @param request @todo
      */
     handleShowRegistrationPage: function handleShowRegistrationPage(request) {
         request.write(Template.get('register')({ token: request.token }));
@@ -140,8 +139,8 @@ module.exports = AdminController({
     },
     /**
      * TODO: document
-     * 
-     * @param request @todo 
+     *
+     * @param request @todo
      */
     handleListUsers: function handleListUsers(request) {
         request.write(Template.get('users')({ token: request.token, users: UserRepository.users }));
@@ -150,8 +149,8 @@ module.exports = AdminController({
 
     /**
      * TODO: document
-     * 
-     * @param request @todo 
+     *
+     * @param request @todo
      */
     handleCheckIn: function handleCheckIn(request) {
         var that = this;
@@ -162,10 +161,10 @@ module.exports = AdminController({
 
     /**
      * TODO: document
-     * 
-     * @param request @todo 
+     *
+     * @param request @todo
      */
     handleGetUserInformation: function handleGetUserInformation(request) {
-        request.sendResponse(request.user); 
+        request.sendResponse(request.user);
     },
 });

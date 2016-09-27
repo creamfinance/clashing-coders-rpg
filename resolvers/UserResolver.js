@@ -21,6 +21,19 @@ module.exports = function UserResolver(request, next) {
         });
     } else if ('USER_ID' in request.variables) {
         request.user = users.users[request.variables.USER_ID];
+
+        if (!request.user) {
+            return request.sendUnauthorized();
+        }
+
+        next();
+    } else if ('EMAIL' in request.variables) {
+        request.user = users.getWithEmail(request.variables.EMAIL);
+
+        if (!request.user) {
+            return request.sendUnauthorized();
+        }
+
         next();
     } else {
         return request.sendUnauthorized();
