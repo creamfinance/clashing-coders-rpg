@@ -29,6 +29,6 @@ var World = module.exports = function World(level, players) {
 
     for (var i = 0, imax = this.map_definition.objectDefinition.length; i < imax; i += 1) {
         var object_definition = this.map_definition.objectDefinition[i];
-        this.map[object.x][object.y].object = new object_definition(); 
+        this.map[object_definition.x][object_definition.y].object = new object_definition.object(); 
     }
 }
