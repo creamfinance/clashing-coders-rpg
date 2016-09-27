@@ -11,6 +11,7 @@ var World = module.exports = function World(level, players) {
     this.height = this.map_definition.height;
     this.map = new Array(this.height);
     this.tileset = {};
+    this.log = [];
 
     this.players = new Array(this.player_definition.length);
     for (var i = 0, imax = this.player_definition.length; i < imax; i += 1) {
@@ -32,3 +33,23 @@ var World = module.exports = function World(level, players) {
         this.map[object_definition.x][object_definition.y].object = new object_definition.object(); 
     }
 }
+
+World.prototype.action = function (player, action, data) {
+    var ret = this.processAction(player, action, data);    
+
+    var inv = {};
+    for (var k in player.inventory) {
+        inv[k] = player.inventory[k];
+    }
+
+    this.log.push({
+        action: action,
+        position: {
+            x: player.position.x,
+            y: player.position.y,
+        },
+        inventory: inv,
+    });
+    console.log(this.log);
+    return ret;
+};

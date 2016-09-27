@@ -8,8 +8,9 @@ function TileDefinition(name, options) {
 
     t.prototype.id = id++;
     t.prototype.traversable = options.traversable === true;
-    t.prototype.used = false;
-    t.prototype.interact = function(){};
+    t.prototype.used = options.used === true;
+    t.prototype.weight = options.weight || 1;
+    t.prototype.interact = options.interact || function(){};
     return t;
 }
 
