@@ -6,8 +6,7 @@ require('./bootstrap')(function () {
         AuthenticationContext = require('./contexts/AuthenticationContext'),
         MinimalRequest = require('./MinimalRequest'),
         MoreAdvancedRequest = require('./request/moreadvancedrequest'),
-        RateLimitMiddleware = require('./middleware/RateLimitMiddleware'),
-        users = require('./users');
+        RateLimitMiddleware = require('./middleware/RateLimitMiddleware');
 
     var router = new Router;
     new (require('./controllers/AuthenticationController'))().registerRouter(router);
