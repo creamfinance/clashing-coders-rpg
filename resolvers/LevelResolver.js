@@ -6,9 +6,12 @@ function clearedLevel(user, level_id) {
 }
 
 module.exports = function LevelResolver(request, next) {
-    var level_id = request.variables.LEVEL_ID;
+    var level_id = 'variables' in request ? request.variables.LEVEL_ID : null;
 
-    if (level_id) {
+    if (request.user.current_level) {
+        request.level = request.user.current_level;
+        next();
+    } else if (level_id) {
         if (level_id == 1) {
             request.level = levels.get(level_id);
             next();
@@ -16,17 +19,11 @@ module.exports = function LevelResolver(request, next) {
         }
 
         // if (clearedLevel(request.user, level_id - 1)) {
-            request.level = levels.get(level_id);
             return next();
         // } else {
         //     return request.sendUnauthorized();
         // }
     } else {
-        if (request.user.current_level) {
-            request.level = request.user.current_level;
-            next();
-        } else {
-            return request.sendUnauthorized();
-        }
+        return request.sendUnauthorized();
     }
 }
