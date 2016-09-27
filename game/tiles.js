@@ -23,6 +23,6 @@ var x = module.exports = {
     7: new TileDefinition('button', { traversable: true, weight: 1, used: false, interact: function(player){ if (!this.used) { this.used = true; }} }),
     8: new TileDefinition('keydoor', { traversable: false, weight: 1, interact: function(player){} }),
     9: new TileDefinition('key', { traversable: true, weight: 1, used: false, interact: function(player){ if (!this.used) {player.inventory.keys++; this.used = true;}} }),
-    9: new TileDefinition('apple', { traversable: true, weight: 1, used: false, interact: function(player){ if (!this.used) {player.inventory.apples++; this.used = true;}} })
+    10: new TileDefinition('apple', { traversable: true, weight: 1, used: false, interact: function(player){ if (!this.used) {player.inventory.apples++; this.used = true;}} })
     //'forest': new TileDefinition('T', { traversable: true })
 }
