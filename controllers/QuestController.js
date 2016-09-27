@@ -137,7 +137,15 @@ module.exports = QuestController({
         if (!(request.variables.LEVEL_ID in request.user.level_metadata) ||
             request.user.level_metadata[request.variables.LEVEL_ID].finished === null) {
             
-            var level = LevelRepository.get(request.variables.LEVEL_ID);
+            var level = LevelRepository.get(request.variables.LEVEL_ID),
+                m = new Array(level.map.length);
+
+            for (var i = 0, max = level.map.length; i < max; i += 1) {
+                m[i] = ''
+                for (var j = 0, jmax = level.map[i].length; j < jmax; j += 1) {
+                    m[i] += level.map[i][j].display;
+                }
+            }
 
             // Initialize Players
             request.user.players = level.players;
@@ -152,7 +160,7 @@ module.exports = QuestController({
                 width: level.width,
                 height: level.height,
                 tileset: level.tileset,
-                map: level.map,
+                map: m,
                 players: level.players,
             });
         } else {
