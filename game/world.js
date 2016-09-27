@@ -5,7 +5,6 @@ var World = module.exports = function World(level, players) {
     for (var key in level) {
         this[key] = level[key];
     }
-    this.init();
 
     this.width = this.map_definition.width;
     this.height = this.map_definition.height;
@@ -32,6 +31,8 @@ var World = module.exports = function World(level, players) {
         var object_definition = this.map_definition.objectDefinition[i];
         this.map[object_definition.x][object_definition.y].object = new object_definition.object(); 
     }
+
+    this.init();
 }
 
 World.prototype.action = function (player, action, data) {
