@@ -104,7 +104,7 @@ module.exports = QuestController({
             }
         );
 
-        router.registerPath('PUT', '/player/{PLAYER_ID}/{ACTION}',
+        router.registerPath('PUT', '/player/{ACTION}',
             {
                 requests: [
                     {
