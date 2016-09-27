@@ -25,5 +25,4 @@ var x = module.exports = {
     8: new TileDefinition('keydoor', 'L', { traversable: false, weight: 1, interact: function(player){} }),
     9: new TileDefinition('key', 'K', { traversable: true, weight: 1, used: false, interact: function(player){ if (!this.used) {player.inventory.keys++; this.used = true;}} }),
     10: new TileDefinition('apple', 'A',  { traversable: true, weight: 1, used: false, interact: function(player){ if (!this.used) {player.inventory.apples++; this.used = true;}} })
-    //'forest': new TileDefinition('T', { traversable: true })
 }

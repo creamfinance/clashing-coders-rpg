@@ -5,8 +5,12 @@ var MapDefinition = require('../game/map'),
 
 module.exports = {
     levels: {
-        //1: require('../levels/1'),
-        //2: require('../levels/2'),
+        1: require('../levels/1'),
+        2: require('../levels/2'),
+        3: require('../levels/3'),
+        4: require('../levels/4'),
+        5: require('../levels/5'),
+        6: require('../levels/6'),
         7: require('../levels/7'),
     },
     get: function (level_num) {
