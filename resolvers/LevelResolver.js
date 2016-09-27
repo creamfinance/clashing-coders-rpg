@@ -6,7 +6,7 @@ function clearedLevel(user, level_id) {
 }
 
 module.exports = function LevelResolver(request, next) {
-    var level_id = request.variables.LEVEL_ID;
+    var level_id = 'variables' in request ? request.variables.LEVEL_ID : null;
 
     if (level_id) {
         if (level_id == 1) {

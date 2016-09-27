@@ -85,7 +85,7 @@ module.exports = QuestController({
             }
         );
 
-        router.registerPath( 'GET', '/level/{LEVEL_ID}/status',
+        router.registerPath( 'GET', '/player/status',
             {
                 requests: [
                     {
@@ -97,13 +97,9 @@ module.exports = QuestController({
                         resolver: [
                             UserResolver, LevelResolver
                         ],
-                        // TODO: implement
-                        callback: this.handleGetLevelInformation.bind(this)
+                        callback: this.handleGetStatus.bind(this)
                     },
                 ],
-                variables: buildVariableDefinition({
-                    'LEVEL_ID': [ new IntegerRule() ],
-                }),
             }
         );
 
@@ -131,15 +127,7 @@ module.exports = QuestController({
 
     },
     handleGetLevelInformation: function (request) {
-        var level = request.user.current_level || request.level;
 
-        request.sendResponse({
-            width: level.width,
-            height: level.height,
-            tileset: level.tileset,
-            map: level.map,
-            players: level.players,
-        });
     },
     handleStartLevel: function (request) {
         var wait;
@@ -157,12 +145,26 @@ module.exports = QuestController({
             // Create a new metadata entry for that level for that user
             UserRepository.createMetadata(request.user, request.variables.LEVEL_ID);
 
-            request.sendSuccess();
+            request.sendResponse({
+                width: request.level.width,
+                height: request.level.height,
+                tileset: request.level.tileset,
+                map: request.level.map,
+                players: request.level.players,
+            });
         } else {
             request.sendResponse({
                 error: 'You already cleared this level!'
             });
         }
+    },
+    handleGetStatus: function (request) {
+        if (! request.level) {
+            request.sendUnauthorized();
+            return;
+        }
+
+        request.sendResponse(request.level.players);
     },
     handleAction: function (request) {
         if (! request.player) {
@@ -185,18 +187,15 @@ module.exports = QuestController({
             return request.sendUnauthorized();
         }
 
+        request.user.players = null;
+        request.user.current_level = null;
+
+        // Clean players
         // Check if winning conditions are met
-        if (request.level.isFinished(request.user.players)) {
-
-            // Clean players
-            request.user.players = null;
-            request.user.current_level = null;
-
+        if (request.level.isFinished(request.level.players)) {
             request.user.level_metadata[request.variables.LEVEL_ID].finished = new Date();
 
-            // Update metadata with finishing time and fails
-            UserRepository.updateMetadata(request.user, request.variables.LEVEL_ID, 
-                request.user.level_metadata[request.variables.LEVEL_ID]);
+            UserRepository.finish(request.user, request.variables.LEVEL_ID);
 
             request.sendResponse({
                 result: 'level cleared!'

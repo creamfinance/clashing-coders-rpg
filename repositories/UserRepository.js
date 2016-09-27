@@ -8,7 +8,7 @@ module.exports = {
         var that = this;
 
         pool.connect(function (err, client, done) {
-            if (err) { cb(err); }
+            if (err) { cb(err); return; }
 
             client.query('SELECT * FROM users', [], function (err, result) {
                 if (err) { cb(err); }
@@ -109,6 +109,7 @@ module.exports = {
             // do nothing...
         }
     },
+
     updateMetadata: function (user, level_id, metadata, cb) {
         var user_metadata = user.level_metadata[level_id];
 
@@ -194,5 +195,21 @@ module.exports = {
             );
         });
     },
-        
+
+    finish: function(user, level_id) {
+        var d = new Date();
+        user.level_metadata[level_id].finished = d;
+
+        pool.connect(function (err, client, done) {
+            if (err) { console.log(err); }
+
+            client.query('UPDATE level_metadata SET finished = $1 WHERE user_id = $2 AND level_id = $3', [d, user.id, level_id],
+                function (err, result) {
+                    done();
+
+                    if (err) console.log(err);
+                }
+            );
+        });
+    },
 };
