@@ -18,12 +18,11 @@ module.exports = function LevelResolver(request, next) {
             return;
         }
 
-        if (clearedLevel(request.user, level_id - 1)) {
-            //request.level = levels.get(level_id);
+        // if (clearedLevel(request.user, level_id - 1)) {
             return next();
-        } else {
-            return request.sendUnauthorized();
-        }
+        // } else {
+        //     return request.sendUnauthorized();
+        // }
     } else {
         return request.sendUnauthorized();
     }
