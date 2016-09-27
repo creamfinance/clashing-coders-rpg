@@ -18,11 +18,17 @@ module.exports = function (player, direction, options) {
                 break;
         }
 
-        if (position.x >= 0 && position.y >= 0 && 
-            position.x < this.width && position.y < this.height &&
-            this.map[position.y][position.x].traversable) {
-            player.position.x = position.x;
-            player.position.y = position.y;
+        if (position.x >= 0 && position.y >= 0 && position.x < this.width && position.y < this.height) {
+            if(this.map[position.x][position.y].type == "keydoor" && this.map[position.x][position.y].traversable == false && player.inventory.keys > 0) {
+                this.map[position.x][position.y].traversable = true;
+                player.inventory.keys--;
+                player.position.x = position.x;
+                player.position.y = position.y;
+            }
+            else if(this.map[position.y][position.x].traversable) {
+                player.position.x = position.x;
+                player.position.y = position.y;
+            }
         } else {
             break;
         }
