@@ -21,8 +21,10 @@ var World = module.exports = function World(level, players) {
         this.map[i] = new Array(this.map_definition.width);
         for (var j = 0, jmax = this.map_definition.width; j < jmax; j += 1) {
             this.map[i][j] = new this.map_definition.tileDefinition[i][j]();
-            this.tileset[this.map[i][j].type] = { 
-                traversable: this.map_definition.tileDefinition[i][j].prototype.traversable
+            this.tileset[this.map[i][j].display] = { 
+                type: this.map[i][j].type,
+                traversable: this.map_definition.tileDefinition[i][j].prototype.traversable,
+                weight: this.map_definition.tileDefinition[i][j].prototype.weight,
             };
         }
     }

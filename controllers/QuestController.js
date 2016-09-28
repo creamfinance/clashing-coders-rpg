@@ -161,7 +161,7 @@ module.exports = QuestController({
                 height: level.height,
                 tileset: level.tileset,
                 map: m,
-                players: level.players,
+                player: level.players[0],
             });
         } else {
             request.sendResponse({
