@@ -128,7 +128,8 @@ module.exports = QuestController({
 
     },
     handleGetLevelInformation: function (request) {
-
+        request.write(request.level.description);
+        request.end();
     },
     handleStartLevel: function (request) {
         var wait;
