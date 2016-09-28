@@ -1,2 +1,10 @@
-Move our player from your startposition (1/1) to finish at (8/8).
-Be aware that not all fields are traversable like wall (#) and water (~). 
+Move our player from your starting position (1/1) to finish at (8/8).
+
+The map consists of tiles, some of wich can be traversed and some not. A detailed description of the tiles used in each level is provided with the map when you start the level, but for this level, you will only have 2 kinds of tiles:
+
+#: Walls, not traversable
+.: Ground, traversable
+
+The GET request to /level/1 will provide you with the same information under the "tileset" key.
+The same response also consists of the level's map under the "map" key; an array of strings where
+each string represents one row of the map in order, and the player's initial position under the "player" key.
