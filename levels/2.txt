@@ -1,1 +1,5 @@
-Description of some sort.
+Lead your player to the goal at (478/488). But you are limited to x steps.
+Weight of fields:
+ground (.) = 1
+forest (T) = 2
+mountain (M) = 5

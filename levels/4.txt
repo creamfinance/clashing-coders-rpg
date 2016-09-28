@@ -1,1 +1,2 @@
-Description of some sort.
+Find the only way thru the labyrinth and end your move at (193/193).
+As you already know from level 1, the wall (#) is not traversable.
