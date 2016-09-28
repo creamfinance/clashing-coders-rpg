@@ -17,7 +17,7 @@ module.exports = {
         return new World(this.levels[level_num]);
     },
     load: function (cb) {
-        var wait = waiter(Object.keys(this.levels).length, cb),
+        var wait = waiter(Object.keys(this.levels).length * 2, cb),
             that = this;
 
         for (var level_id in this.levels) {
@@ -34,7 +34,17 @@ module.exports = {
                     that.levels[level_id].id = level_id;
                     wait();
                 });
+
+                fs.readFile('levels/' + level_id + '.txt', 'utf8', function (err, data) {
+                    var data;
+
+                    //if (err) console.log(err); return cb(err);
+
+                    that.levels[level_id].description = data;
+                    wait();
+                });
             }(level_id));
+
         }
     },
 };
