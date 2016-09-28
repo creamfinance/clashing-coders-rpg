@@ -7,6 +7,7 @@ module.exports = {
     levels: {
         //1: require('../levels/1'),
         //2: require('../levels/2'),
+        6: require('../levels/6'),
         7: require('../levels/7'),
     },
     get: function (level_num) {
