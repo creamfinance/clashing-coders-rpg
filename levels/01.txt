@@ -1,2 +1,0 @@
-Move our player from your startposition (1/1) to finish at (8/8).
-Be aware that not all fields are traversable like wall (#) and water (~). 
