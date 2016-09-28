@@ -45,15 +45,5 @@ World.prototype.action = function (player, action, data) {
     for (var k in player.inventory) {
         inv[k] = player.inventory[k];
     }
-
-    this.log.push({
-        action: action,
-        position: {
-            x: player.position.x,
-            y: player.position.y,
-        },
-        inventory: inv,
-    });
-    console.log(this.log);
     return ret;
 };

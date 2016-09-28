@@ -1,1 +1,6 @@
-Description of some sort.
+Move your player at this map to the target at (462/485) and stay under 1800 steps.
+The steps depends on the field you step.
+Weight of fields:
+ground (.) = 1
+forest (T) = 2
+mountain (M) = 5

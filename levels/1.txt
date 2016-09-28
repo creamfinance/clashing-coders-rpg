@@ -5,6 +5,17 @@ The map consists of tiles, some of wich can be traversed and some not. A detaile
 #: Walls, not traversable
 .: Ground, traversable
 
-The GET request to /level/1 will provide you with the same information under the "tileset" key.
-The same response also consists of the level's map under the "map" key; an array of strings where
-each string represents one row of the map in order, and the player's initial position under the "player" key.
+The POST request to /level/1/start will provide you with all the necessary information. Don't worry, you can start over a level as often as you want by simply setting off the start request again; it will reset the level's state to starting condition.
+
+As an example, you can use this curl command (if you have curl installed):
+curl -H "Content-Type: application/json" -H "x-token: [YOUR TOKEN HERE]" -X POST "HTTP://contest.clashing-coders.at/level/1/start"
+
+It will provide you with a response like this:
+{"width":10,"height":10,"tileset":{"#":{"type":"wall","traversable":false,"weight":1},".":{"type":"ground","traversable":true,"weight":1},"T":{"type":"forest","traversable":true,"weight":2}},"map":["##########","#........#","#........#","#......T.#","#......T.#","#......T.#","#TTTTTTT.#","#........#","#........#","##########"],"player":{"position":{"x":1,"y":1},"inventory":{},"steps":0,"pushedButtons":[]}}
+
+The "width" and "height" keys will give you the width and height of the map respectively.
+The "tileset" key will provide you with a definition of the characters used in the map. Each entry in this object will have the character as key and it's metadata as object.
+    "type" is just a description for that tile,
+    "traversable" is true if the player can walk on that tile, false otherwise
+The "map" key will hold an array of strings, each string will represent a row of the map, in order.
+The "player" key will hold the player's initial position.

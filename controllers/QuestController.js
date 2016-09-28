@@ -222,7 +222,6 @@ module.exports = QuestController({
             request.sendResponse({
                 error: 'goal not met!',
                 messages: request.level.messages,
-                log: request.level.log
             });
         }
     },
