@@ -5,7 +5,7 @@ module.exports = {
     player_definition: [{ x:1, y:1 }],
     isFinished: function (players) {
         //var fin = false;
-        return players[0].position.x == 2 && players[0].position.y == 1;
+        return players[0].position.x == 9 && players[0].position.y == 9;
     },
     processAction: function (player, action, options) {
         options = options || {};

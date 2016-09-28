@@ -42,6 +42,5 @@ var x = module.exports = {
                 this.used = true;
             }
         }
-})
-    //'forest': new TileDefinition('T', { traversable: true })
+    })
 }
