@@ -11,10 +11,11 @@ var World = module.exports = function World(level, players) {
     this.map = new Array(this.height);
     this.tileset = {};
     this.log = [];
+    this.messages = [];
 
     this.players = new Array(this.player_definition.length);
     for (var i = 0, imax = this.player_definition.length; i < imax; i += 1) {
-        this.players[i] = new Player(this.player_definition[i]); 
+        this.players[i] = new Player(this.player_definition[i]);
     }
 
     for (var i = 0, imax = this.map_definition.height; i < imax; i += 1) {
@@ -31,14 +32,14 @@ var World = module.exports = function World(level, players) {
 
     for (var i = 0, imax = this.map_definition.objectDefinition.length; i < imax; i += 1) {
         var object_definition = this.map_definition.objectDefinition[i];
-        this.map[object_definition.x][object_definition.y].object = new object_definition.object(); 
+        this.map[object_definition.x][object_definition.y].object = new object_definition.object();
     }
 
     this.init();
 }
 
 World.prototype.action = function (player, action, data) {
-    var ret = this.processAction(player, action, data);    
+    var ret = this.processAction(player, action, data);
 
     var inv = {};
     for (var k in player.inventory) {

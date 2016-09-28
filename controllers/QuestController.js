@@ -8,11 +8,11 @@ var Class = require('class'),
     UserRepository = require('../repositories/UserRepository'),
     LevelRepository = require('../repositories/LevelRepository'),
     tiles = require('../game/tiles'),
-    tiles_map = require('../game/tiles').map(function (n, c) { 
+    tiles_map = require('../game/tiles').map(function (n, c) {
         n[this[c].prototype.display] = {
             name: c,
             weight: this[c].prototype.weight
-        }; return n; 
+        }; return n;
     }),
     buildVariableDefinition = require('../util/buildVariableDefinition');
 
@@ -136,7 +136,7 @@ module.exports = QuestController({
         // Only allow starting the level if the level has not been finished already
         if (!(request.variables.LEVEL_ID in request.user.level_metadata) ||
             request.user.level_metadata[request.variables.LEVEL_ID].finished === null) {
-            
+
             var level = LevelRepository.get(request.variables.LEVEL_ID),
                 m = new Array(level.map.length);
 
@@ -203,7 +203,7 @@ module.exports = QuestController({
 
         // Clean players
         // Check if winning conditions are met
-        if (request.level.isFinished(request.level.players)) {
+        if (request.level.isFinished(request.level.players, request)) {
             request.user.level_metadata[request.variables.LEVEL_ID].finished = new Date();
 
             UserRepository.finish(request.user, request.variables.LEVEL_ID);
@@ -219,6 +219,7 @@ module.exports = QuestController({
 
             request.sendResponse({
                 error: 'goal not met!',
+                messages: request.level.messages,
                 log: request.level.log
             });
         }

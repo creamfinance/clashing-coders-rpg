@@ -22,10 +22,11 @@ module.exports = {
             { x: 182, y: 72 },
             { x: 178, y: 164 },
     ],
-    isFinished: function (players) {
-        for (var pbi in this.pushedButtons) {
-            var pushedButton = this.pushedButtons[pbi];
-            var found = false;
+    isFinished: function (players, request) {
+        var found = false;
+
+        for (var pbi in players[0].pushedButtons) {
+            var pushedButton = players[0].pushedButtons[pbi];
 
             for (var bi in this.goodButtons) {
                 if (this.goodButtons[bi].x == pushedButton.x && this.goodButtons[bi].y == pushedButton.y) {
@@ -36,16 +37,18 @@ module.exports = {
 
             if (!found) {
                 console.log('pushed a wrong button');
-                return false;
+                request.level.messages.push('pushed a wrong button');
+                break;
             }
         }
 
+        found = false;
+
         for (var gbi in this.goodButtons) {
             var goodButton = this.goodButtons[gbi];
-            var found = false;
 
-            for (var bi in this.pushedButtons) {
-                if (this.pushedButtons[bi].x == goodButton.x && this.pushedButtons[bi].y == goodButton.y) {
+            for (var bi in players[0].pushedButtons) {
+                if (players[0].pushedButtons[bi].x == goodButton.x && players[0].pushedButtons[bi].y == goodButton.y) {
                     found = true;
                     break;
                 }
@@ -53,7 +56,8 @@ module.exports = {
 
             if (!found) {
                 console.log('not all buttons pushed');
-                return false;
+                request.level.messages.push('not all buttons pushed');
+                break;
             }
         }
 
@@ -69,9 +73,13 @@ module.exports = {
             case 'right':
                 this.movePlayer(player, action, options);
                 return true;
+            case 'interact':
+                this.interactPlayer(player);
+                return true;
             default:
                 return false;
         }
     },
     movePlayer: require('./movePlayer'),
+    interactPlayer: require('./interactPlayer'),
 };
