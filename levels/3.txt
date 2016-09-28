@@ -1,4 +1,4 @@
-Move your player at this map to the target at (462/485) and stay under x steps.
+Move your player at this map to the target at (462/485) and stay under 1800 steps.
 The steps depends on the field you step.
 Weight of fields:
 ground (.) = 1
