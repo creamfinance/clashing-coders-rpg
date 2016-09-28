@@ -1,1 +1,1 @@
-On this map you have collect 15 apples. Your player starts at (99/99) and is restricted to 400 steps.
+On this map you have to collect 15 apples. Your player starts at (99/99) and is restricted to 400 steps.
