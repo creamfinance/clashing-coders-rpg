@@ -177,7 +177,7 @@ module.exports = QuestController({
             return;
         }
 
-        request.sendResponse(request.level.players);
+        request.sendResponse(request.level.players[0]);
     },
     handleAction: function (request) {
         if (! request.player) {
