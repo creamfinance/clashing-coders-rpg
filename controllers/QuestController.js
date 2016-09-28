@@ -211,7 +211,9 @@ module.exports = QuestController({
             UserRepository.finish(request.user, request.variables.LEVEL_ID);
 
             request.sendResponse({
-                result: 'level cleared!'
+                result: 'level cleared!',
+                steps: request.level.players[0].steps,
+                position: request.level.players[0].position
             });
 
         // If not, we update the failcount and return
@@ -222,6 +224,8 @@ module.exports = QuestController({
             request.sendResponse({
                 error: 'goal not met!',
                 messages: request.level.messages,
+                steps: request.level.players[0].steps,
+                position: request.level.players[0].position
             });
         }
     },
