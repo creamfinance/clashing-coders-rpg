@@ -1,1 +1,4 @@
-Description of some sort.
+Here you have to build bridges between the islands. The challenge is that you have only 70 wood pieces to build a bridge.
+Start from the positon (6/5). On the island you can move normally without restriction.
+Water is not traversable except...
+So find the constellation of islands and bridge elements to reach the island with the coordinates (356/370).
