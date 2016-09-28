@@ -1,3 +1,7 @@
-In this donjon you can open doors with keys. If you have a key in your inventory the door will open if you step on the door.
+In this key donjon you can open doors with keys. If you have a key in your inventory the door will open if you step on the door.
 The key can only be used for one door.
 Start at (1/99) and reach the goal at (95/5).
+
+This level consists of the following new tiles:
+K: Key, traversable, weight: 1, interactable, usable: 1
+L: Keydoor, not traversable without key, weight: 1

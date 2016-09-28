@@ -1,6 +1,6 @@
 Move your player at this map to the target at (462/485) and stay under 1800 steps.
-The steps depends on the field you step.
-Weight of fields:
-ground (.) = 1
-forest (T) = 2
-mountain (M) = 5
+
+As in the level before every tile type has its weight.
+
+Following new tile has this level:
+T: Forest, traversable, weight: 2

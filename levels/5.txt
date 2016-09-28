@@ -1,1 +1,17 @@
 On this map you have to collect 15 apples. Your player starts at (99/99) and is restricted to 400 steps.
+If you are on an apple field you can pick up the apple if you send the interact command.
+The level is cleared if you have 15 apples in your inventory.
+
+The interact command is like a move command. Just take interact as action.
+For excample:
+METHOD: PUT
+URL: http://contest.clashing-coders.at/player/interact
+HEADER: Content-Type: application/json; x-token: [your token]
+
+Example via cURL:
+curl -H "Content-Type: application/json" -H "x-token: [TOKEN]" -X PUT "http://contest.clashing-coders.at/player/interact"
+
+You will find following new tiles in this level:
+~: Water, not traversable
+D: Door, traversable, weight: 1
+A: Apple, traversable, weight: 1, interactable, usable: 1
