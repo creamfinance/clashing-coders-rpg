@@ -218,6 +218,13 @@ module.exports = QuestController({
             return;
         }
 
+        if (! request.post) {
+            request.sendResponse({
+                error: 'bulk request was not in the correct format. Bulk needs to be sent as a json array'
+            });
+            return;
+        }
+
         if (request.post.length > 1000) {
             request.sendResponse({
                 error: 'bulk transactions take a maximum of 1000 actions per request, given were ' + request.post.length
