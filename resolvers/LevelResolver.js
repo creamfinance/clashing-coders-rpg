@@ -22,11 +22,11 @@ module.exports = function LevelResolver(request, next) {
             return;
         }
 
-        // if (clearedLevel(request.user, level_id - 1)) {
+        if (clearedLevel(request.user, level_id - 1)) {
             return next();
-        // } else {
-        //     return request.sendUnauthorized();
-        // }
+        } else {
+            return request.sendUnauthorized();
+        }
     } else {
         return request.sendUnauthorized();
     }
