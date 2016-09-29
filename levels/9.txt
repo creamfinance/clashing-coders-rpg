@@ -1,7 +1,14 @@
 In this level you have to push all buttons in the buildings which have a size of exactly 19 fields.
-A building is enclosed of wall elements and must have a door.
-The fields contained by the wall, excluding the wall and door itself should amount to 19 fields including the button.
-After you pressed the last button you are finished and you can send the end command to clear the level.
 
-This level has one new tile:
-B: Button, traversable, weight: 1, interactable, usable: 1
+A building is enclosed by wall elements and must have a door.
+
+The fields contained by the wall, excluding the wall and door itself, should amount to 19 fields including the button.
+
+This level has two new tiles:
+B: Button, traversable: true, weight: 1
+D: Door, traversable: true, weight: 1
+
+A button is automatically pressed when you walk on that tile.
+
+After you pressed all the buttons necessary, POST to /level/9/end to finish the level.
+

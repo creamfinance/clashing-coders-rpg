@@ -7,6 +7,6 @@ As an example, you can use this cURL command (if you have curl installed):
 curl -H "Content-Type: application/json" -H "x-token: [YOUR TOKEN]" -X GET "HTTP://contest.clashing-coders.at/player/status"
 
 It will provide you with a response like:
-{"position":{"x":1,"y":1},"inventory":{},"steps":0,"pushedButtons":[]}
+{"position":{"x":1,"y":1},"inventory":{},"steps":0}
 
 This map will feature some wall to obstruct your way. Move the player from his starting position (5,5) to the ending area between (51,60) and (58,68) and POST to /level/2/end to finish the level.

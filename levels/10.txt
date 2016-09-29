@@ -1,0 +1,6 @@
+This map features a set of islands and provides you with 70 wood to build bridges across the islands.
+
+The islands are seperated by water; while water is not traversable by default, if you try to walk on a water tile while having at least 1 wood in your inventory,
+1 wood will be consumed and a bridge across that tile of water will be built; allowing you to walk on it.
+
+Move your player from their starting position at (6,5) to the goal at (358, 369) and POST to /level/10/end to finish the level. You will start with 70 wood in your inventory and there is no wood to pick up in this level; you have to make due with what you have.

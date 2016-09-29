@@ -1,2 +1,2 @@
 This is the same map as last level, but this time there is a step limit.
-Move your player from position (1,1) to the goal at (478,488) in under 2450 steps to finish the level.
+Move your player from position (1,1) to the goal at (478,488) in under 2450 steps; then POST to /level/7/end to finish the level.
