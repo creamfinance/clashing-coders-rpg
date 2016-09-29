@@ -19,7 +19,7 @@ var x = module.exports = {
     2: new TileDefinition('wall', '#', { traversable: false, weight: 1, interact: function(player){} }),
     3: new TileDefinition('forest', 'T', { traversable: true, weight: 2, interact: function(player){} }),
     4: new TileDefinition('mountain', 'M', { traversable: true, weight: 5, interact: function(player){} }),
-    5: new TileDefinition('water', '~', { traversable: false, weight: 5, interact: function(player){} }),
+    5: new TileDefinition('water', '~', { traversable: false, weight: 1, interact: function(player){} }),
     6: new TileDefinition('door', 'D', { traversable: true, weight: 1, interact: function(player){} }),
     7: new TileDefinition('button', 'B', { traversable: true, weight: 1, used: false, interact: function(player){} }),
     8: new TileDefinition('keydoor', 'L', { traversable: false, weight: 1, interact: function(player){} }),
