@@ -248,6 +248,10 @@ module.exports = QuestController({
             return request.sendUnauthorized();
         }
 
+        if (request.variables.LEVEL_ID !== request.level.id) {
+            return request.sendUnauthorized();
+        }
+
         request.user.players = null;
         request.user.current_level = null;
 

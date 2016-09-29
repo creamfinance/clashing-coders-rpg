@@ -1,4 +1,4 @@
-A tile also has a "weight" to it, which defines how many steps your character needs to walk on that tile. A level may introduce a limit to how long you character should take at most.
+A tile also has a "weight" to it, which defines how many staps  your character needs to walk on that tile. A level may introduce a limit to how long you character should take at most.
 
 The weight of each tile used in a level's map is provided in the /level/X/start POST request under the "tileset" key; every tile in there will have a weight defined under the "weight" key.
 
@@ -7,4 +7,4 @@ This level for example consists of the following tiles:
 .: Ground, traversable, weight: 1
 M: Mountain, traversable, weight: 5
 
-Move your player from the his starting position (3,16) to the goal at (595,31) and POST to level/3/end to finish the level.
+Move your player from the his starting position (3,16) to the goal at 595 on the x-axis and anywhere on the y-axis and POST to level/3/end to finish the level.
