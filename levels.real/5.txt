@@ -1,0 +1,2 @@
+Guide your player from their starting position at (1,1) to the goal area between (188,188) and (198,198).
+This map features a labyrinth; with dead-ends, no loops and all walkable tiles are connected. There is only one correct path and there is no step limit.
