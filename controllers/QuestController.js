@@ -104,6 +104,24 @@ module.exports = QuestController({
             }
         );
 
+        router.registerPath('PUT', '/player/bulk',
+            {
+                requests: [
+                    {
+                        headers: new Validator({
+                            'content-type': new EnumRule([ 'application/json' ]),
+                            'x-token': new RequiredRule(),
+                        }),
+                        body: new Validator({}),
+                        resolver: [
+                            UserResolver, LevelResolver, PlayerResolver
+                        ],
+                        callback: this.handleBulkAction.bind(this),
+                    }
+                ]
+            }
+        );
+
         router.registerPath('PUT', '/player/{ACTION}',
             {
                 requests: [
@@ -120,7 +138,6 @@ module.exports = QuestController({
                     }
                 ],
                 variables: buildVariableDefinition({
-                    'PLAYER_ID': [ new IntegerRule() ],
                     'ACTION': [ ],
                 }),
             }
@@ -194,6 +211,30 @@ module.exports = QuestController({
                 error: 'not a valid action'
             });
         }
+    },
+    handleBulkAction: function (request) {
+        if (! request.player) {
+            request.sendUnauthorized();
+            return;
+        }
+
+        if (request.post.length > 1000) {
+            request.sendResponse({
+                error: 'bulk transactions take a maximum of 1000 actions per request, given were ' + request.post.length
+            });
+            return;
+        }
+
+        for (var i = 0, max = request.post.length; i < max; i += 1) {
+            if ( ! ((typeof request.post[i]) == 'string') || ! request.level.action(request.player, request.post[i], request.post)) {
+                request.sendResponse({
+                    error: 'invalid action ' + request.post[i]
+                }); 
+                return;
+            }
+        }
+
+        request.sendSuccess();
     },
     handleEndLevel: function (request) {
         if (! request.user.players) {
