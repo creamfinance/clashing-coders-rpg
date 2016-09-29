@@ -2,10 +2,12 @@ module.exports = {
     init: function () {
 
     },
-    player_definition: [{x: 3, y: 3}],
+    player_definition: [{x: 5, y: 5}],
     isFinished: function (players) {
-        //var fin = false;
-        return players[0].position.x == 138 && players[0].position.y == 139 && players[0].steps < 480; //step kleiner whatever
+        return players[0].position.x >= 51 &&
+          players[0].position.x <= 58 &&
+            players[0].position.y >= 60 &&
+            players[0].position.y <= 68;
     },
     processAction: function (player, action, options) {
         options = options || {};

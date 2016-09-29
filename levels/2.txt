@@ -1,10 +1,12 @@
-A tile also has a "weight" to it, which defines how many steps your character needs to walk on that tile. A level may introduce a limit to how long you character should take at most.
+Some tiles cannot be walked over. These tiles are defined as traversable: false in the tileset.
+Trying to move on one of those tiles will leave the player standing on his position instead. It won't return you with an error though and the level will continue normally.
 
-The weight of each tile used in a level's map is provided in the /level/X/start POST request under the "tileset" key; every tile in there will have a weight defined under the "weight" key.
+If you need to check for the players position on the server you can invoke the /player/status GET request, which will return you the player's position, amongst other things.
 
-This level for example consists of the following tiles:
-#: Walls, not traversable
-.: Ground, traversable, weight: 1
-M: Mountain, traversable, weight: 5
+As an example, you can use this cURL command (if you have curl installed):
+curl -H "Content-Type: application/json" -H "x-token: [YOUR TOKEN]" -X GET "HTTP://contest.clashing-coders.at/player/status"
 
-Move your player from the starting position (3,3) to the goal at (138, 139), taking at most 600 steps.
+It will provide you with a response like:
+{"position":{"x":1,"y":1},"inventory":{},"steps":0,"pushedButtons":[]}
+
+This map will feature some wall to obstruct your way. Move the player from his starting position (5,5) to the ending area between (51,60) and (58,68) and POST to /level/2/end to finish the level.

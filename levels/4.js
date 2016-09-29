@@ -2,10 +2,10 @@ module.exports = {
     init: function () {
 
     },
-    player_definition: [{ x:4, y:4 }],
+    player_definition: [{x: 3, y: 3}],
     isFinished: function (players) {
         //var fin = false;
-        return players[0].position.x == 478 && players[0].position.y == 488 && players[0].steps < 2450; //steps <= 900
+        return players[0].position.x == 138 && players[0].position.y == 139 && players[0].steps < 480; //step kleiner whatever
     },
     processAction: function (player, action, options) {
         options = options || {};
@@ -17,13 +17,9 @@ module.exports = {
             case 'right':
                 this.movePlayer(player, action, options);
                 return true;
-            case 'interact':
-                this.interactPlayer(player);
-                return true;
             default:
                 return false;
         }
     },
     movePlayer: require('./movePlayer'),
-    interactPlayer: require('./interactPlayer'),
 };

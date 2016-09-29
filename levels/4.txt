@@ -1,4 +1,1 @@
-Guide your player to the end of the labyrinth.
-The labyrinth has only one correct path and no circles.
-
-Your player starts at (1,1) should finish at the area between (188,188) and (198,198).
+Move your player from the starting position (3,3) to the goal at (138, 139), taking at most 600 steps.

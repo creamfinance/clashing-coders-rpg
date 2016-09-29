@@ -1,11 +1,13 @@
 module.exports = {
     init: function () {
-        this.players[0].inventory.apples = 0;
+
     },
-    player_definition: [{ x:99, y:99 }],
+    player_definition: [{ x:1, y:1 }],
     isFinished: function (players) {
-        //var fin = false;
-        return players[0].inventory.apples == 15 && players[0].steps <= 400; //steps <= 900
+        return players[0].position.x >= 188 &&
+           players[0].position.x <= 198 &&
+           players[0].position.y >= 188 &&
+           players[0].position.y <= 198;
     },
     processAction: function (player, action, options) {
         options = options || {};

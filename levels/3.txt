@@ -1,6 +1,10 @@
-Move your player at this map to the target at (462/485) and stay under 1800 steps.
+A tile also has a "weight" to it, which defines how many staps  your character needs to walk on that tile. A level may introduce a limit to how long you character should take at most.
 
-As in the level before every tile type has its weight.
+The weight of each tile used in a level's map is provided in the /level/X/start POST request under the "tileset" key; every tile in there will have a weight defined under the "weight" key.
 
-Following new tile has this level:
-T: Forest, traversable, weight: 2
+This level for example consists of the following tiles:
+#: Walls, not traversable
+.: Ground, traversable, weight: 1
+M: Mountain, traversable, weight: 5
+
+Move your player from the his starting position (3,16) to the goal at (595,31) and POST to level/3/end to finish the level.

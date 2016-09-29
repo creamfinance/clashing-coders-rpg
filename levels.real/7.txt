@@ -1,2 +1,0 @@
-This is the same map as last level, but this time there is a step limit.
-Move your player from position (1,1) to the goal at (478,488) in under 2450 steps to finish the level.

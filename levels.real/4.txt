@@ -1,1 +1,0 @@
-Move your player from the starting position (3,3) to the goal at (138, 139), taking at most 600 steps.

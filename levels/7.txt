@@ -1,7 +1,2 @@
-In this level you have to push all buttons in the buildings which have a size of exactly 19 fields.
-A building is enclosed of wall elements and must have a door.
-The fields contained by the wall, excluding the wall and door itself should amount to 19 fields including the button.
-After you pressed the last button you are finished and you can send the end command to clear the level.
-
-This level has one new tile:
-B: Button, traversable, weight: 1, interactable, usable: 1
+This is the same map as last level, but this time there is a step limit.
+Move your player from position (1,1) to the goal at (478,488) in under 2450 steps to finish the level.

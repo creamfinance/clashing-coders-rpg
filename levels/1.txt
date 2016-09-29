@@ -1,4 +1,4 @@
-Move our player from your starting position (1/1) to finish at (8/8).
+Move our player from your starting position (1/1) to finish at (8/8) and POST to /level/1/end to finish the level.
 
 The map consists of tiles, some of wich can be traversed and some not. A detailed description of the tiles used in each level is provided with the map when you start the level, but for this level, you will only have 2 kinds of tiles:
 
