@@ -26,6 +26,7 @@ module.exports = {
         var found = false;
 
         for (var pbi in players[0].pushedButtons) {
+            found = false;
             var pushedButton = players[0].pushedButtons[pbi];
 
             for (var bi in this.goodButtons) {
@@ -45,6 +46,7 @@ module.exports = {
         found = false;
 
         for (var gbi in this.goodButtons) {
+            found = false;
             var goodButton = this.goodButtons[gbi];
 
             for (var bi in players[0].pushedButtons) {

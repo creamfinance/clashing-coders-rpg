@@ -123,10 +123,9 @@ def pathFind(the_map, n, m, dirs, dx, dy, xA, yA, xB, yB):
                     or the_map[ydy][xdx] == '1' or closed_nodes_map[ydy][xdx] == 1):
                 # generate a child node
                 weight = 1
-                if the_map[ydy][xdx] == '2':
-                    weight = 2
-                if the_map[ydy][xdx] == '3':
-                    weight = 5
+
+                if the_map[ydy][xdx] == '#':
+                    weight = 50000
 
                 m0 = node(xdx, ydy, n0.distance, n0.priority)
                 m0.nextMove(dirs, i, weight)
@@ -184,6 +183,54 @@ def movePlayer(direction):
     headers = {'Content-Type': 'application/json', 'x-token': 'MS0xNDc0OTc5ODI5Njg3LTg2YWM1NTI1MzU5NWJjMGNmMWI0MTQ0YzM3OTlkZTRm'}
     r = requests.put(url, headers=headers)
 
+def interact():
+    url = 'http://10.21.0.195:8888/player/interact'
+    headers = {'Content-Type': 'application/json', 'x-token': 'MS0xNDc0OTc5ODI5Njg3LTg2YWM1NTI1MzU5NWJjMGNmMWI0MTQ0YzM3OTlkZTRm'}
+    r = requests.put(url, headers=headers)
+
+def measureRoom(coords, the_map, visited):
+    if (the_map[coords['y']][coords['x']] != '.' and the_map[coords['y']][coords['x']] != 'B'):
+        return 0
+    else:
+        for vi in visited:
+            if (coords['y'] == vi['y'] and coords['x'] == vi['x']):
+                return 0
+
+        coordsup = { 'y': coords['y'] - 1, 'x': coords['x'] }
+        coordsdown = { 'y': coords['y'] + 1, 'x': coords['x'] }
+        coordsleft = { 'y': coords['y'], 'x': coords['x'] - 1 }
+        coordsright = { 'y': coords['y'], 'x': coords['x'] + 1 }
+        visited.append(coords)
+        return 1 + measureRoom(coordsup, the_map, visited) + measureRoom(coordsdown, the_map, visited) + measureRoom(coordsleft, the_map, visited) + measureRoom(coordsright, the_map, visited)
+
+def searchButton(coords, the_map, visited):
+    if  the_map[coords['y']][coords['x']] == 'B':
+        return coords
+    elif the_map[coords['y']][coords['x']] != '.':
+        return None;
+    else:
+        for vi in visited:
+            if (coords['y'] == vi['y'] and coords['x'] == vi['x']):
+                return None
+
+        coordsup = { 'y': coords['y'] - 1, 'x': coords['x'] }
+        coordsdown = { 'y': coords['y'] + 1, 'x': coords['x'] }
+        coordsleft = { 'y': coords['y'], 'x': coords['x'] - 1 }
+        coordsright = { 'y': coords['y'], 'x': coords['x'] + 1 }
+        visited.append(coords)
+        up = searchButton(coordsup, the_map, visited)
+        down = searchButton(coordsdown, the_map, visited)
+        left = searchButton(coordsleft, the_map, visited)
+        right = searchButton(coordsright, the_map, visited)
+
+        if up is not None:
+            return up
+        if down is not None:
+            return down
+        if left is not None:
+            return left
+        if right is not None:
+            return right
 
 # MAIN
 dirs = 4 # number of possible directions to move on the map
@@ -207,55 +254,89 @@ for y in range(m/8, m * 7 / 8):
 
 # randomly select start and finish locations from a list
 
-(xA, yA, xB, yB) = random.choice(sf)
 abc = startLevel(level)
 
 import json
 parsed_json = json.loads(abc)
 the_map = parsed_json['map']
 x = 0
+doors = []
 for linei in range(len(the_map)):
     line = the_map[linei]
     for tilei in range(len(line)):
         tile = line[tilei]
         if tile == 'D':
             print('x', tilei, 'y', linei, 'door')
+            doors.append({'x': tilei, 'y': linei})
+print(doors)
 
+buttons = []
+
+for door in doors:
+    firsttile = { 'y': door['y'] - 1, 'x': door['x'] }
+    size = measureRoom(firsttile, the_map, [])
+    if size == 19:
+        print('ROFL', door)
+        buttontile = searchButton(firsttile, the_map, [])
+        print buttontile
+        buttons.append(buttontile)
+
+startx = 10
+starty = 190
+routes = []
+
+for button in buttons:
+    (xA, yA, xB, yB) = (startx, starty, button['x'], button['y'])
+    route = pathFind(the_map, n, m, dirs, dx, dy, xA, yA, xB, yB)
+    startx = button['x']
+    starty = button['y']
+    routes.append(route)
+
+print routes
+
+# b = doors.pop()
+# print(b)
+# firsttile = { 'y': b['y'] - 1, 'x': b['x'] }
+# print firsttile
+# size = measureRoom(firsttile, the_map, [])
+# print size
 
 # the_map = grid
 # print 'Map size (X,Y): ', n, m
 # print 'Start: ', xA, yA
 # print 'Finish: ', xB, yB
 # t = time.time()
-# route = pathFind(the_map, n, m, dirs, dx, dy, xA, yA, xB, yB)
 # print 'Time to generate the route (seconds): ', time.time() - t
 # print 'Route:'
 # print route
 #
 #
 # # mark the route on the map
-# if len(route) > 0:
-#     x = xA
-#     y = yA
-#     the_map[y][x] = 2
-#     for i in range(len(route)):
-#         j = int(route[i])
-#         x += dx[j]
-#         y += dy[j]
-#
-#         if dy[j] == 1:
-#             movePlayer("down")
-#         if dy[j] == -1:
-#             movePlayer("up")
-#         if dx[j] == 1:
-#             movePlayer("right")
-#         if dx[j] == -1:
-#             movePlayer("left")
-#
-#         the_map[y][x] = '4'
-#     the_map[y][x] = 4
-#
-# endLevel(level)
+for route in routes:
+    if len(route) > 0:
+        x = 10
+        y = 190
+        for i in range(len(route)):
+            j = int(route[i])
+            x += dx[j]
+            y += dy[j]
+
+            if dy[j] == 1:
+                # print 'down'
+                movePlayer("down")
+            if dy[j] == -1:
+                # print 'up'
+                movePlayer("up")
+            if dx[j] == 1:
+                # print 'right'
+                movePlayer("right")
+            if dx[j] == -1:
+                # print 'left'
+                movePlayer("left")
+        interact()
+        print 'pushed button'
+
+endLevel(level)
 #
 # # display the map with the route added
 # print 'Map:'
