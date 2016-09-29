@@ -1,7 +1,7 @@
 { "height":10,
  "layers":[
         {
-         "data":[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 3, 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+         "data":[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
          "height":10,
          "name":"Kachelebene 1",
          "opacity":1,
@@ -17,28 +17,15 @@
  "tileheight":32,
  "tilesets":[
         {
-         "columns":32,
+         "columns":3,
          "firstgid":1,
-         "image":"..\/Downloads\/terrain.png",
-         "imageheight":1024,
-         "imagewidth":1024,
+         "image":"..\/..\/..\/home\/ml\/Downloads\/tileset coding contest.png",
+         "imageheight":128,
+         "imagewidth":96,
          "margin":0,
-         "name":"terrain",
+         "name":"tileset coding contest",
          "spacing":0,
-         "tilecount":1024,
-         "tileheight":32,
-         "tilewidth":32
-        }, 
-        {
-         "columns":5,
-         "firstgid":1025,
-         "image":"..\/Downloads\/rpg indoor tileset expansion 1 trans.png",
-         "imageheight":192,
-         "imagewidth":176,
-         "margin":0,
-         "name":"rpg indoor tileset expansion 1 trans",
-         "spacing":0,
-         "tilecount":30,
+         "tilecount":12,
          "tileheight":32,
          "tilewidth":32
         }],
