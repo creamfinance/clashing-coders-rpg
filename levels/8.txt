@@ -18,5 +18,5 @@ curl -H "Content-Type: application/json" -H "x-token: [YOUR TOKEN]" -X GET "HTTP
 Which would return you a JSON-response like this:
 {"position":{"x":12,"y":31},"inventory":{"keys":3},"steps":0}
 
-Move your player from his starting position at (1,99) to the goal area between (x,x) and (y,y); then POST to /level/8/end to finish the level.
+Move your player from his starting position at (1,99) to the goal at (95,5); then POST to /level/8/end to finish the level.
 Be careful to let your algorithm chose the correct doors to open, as there are more doors than keys in this level.
