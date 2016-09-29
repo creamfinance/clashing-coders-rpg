@@ -1,4 +1,3 @@
-6,5 358,369
 module.exports = {
     init: function () {
         this.players[0].inventory.wood = 70;
