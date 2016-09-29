@@ -1,4 +1,5 @@
 var Class = require('class'),
+    redis = require('../redis'),
     TokenResolver = require('../resolvers/TokenResolver'),
     UserResolver = require('../resolvers/UserResolver'),
     Template = require('../templates'),
@@ -112,6 +113,38 @@ module.exports = AdminController({
                 }),
             }
         );
+
+        router.registerPath('POST', '/admin/{TOKEN}/authentication/allow',
+            {
+                requests: [
+                    {
+                        headers: new Validator({
+                        }),
+                        body: new Validator({}),
+                        resolver: [
+                            TokenResolver
+                        ],
+                        callback: this.handleAllowRegistration.bind(this)
+                    }
+                ],
+            }
+        );
+
+        router.registerPath('POST', '/admin/{TOKEN}/authentication/deny',
+            {
+                requests: [
+                    {
+                        headers: new Validator({
+                        }),
+                        body: new Validator({}),
+                        resolver: [
+                            TokenResolver
+                        ],
+                        callback: this.handleCloseRegistration.bind(this)
+                    }
+                ],
+            }
+        );
     },
 
     /**
@@ -167,4 +200,26 @@ module.exports = AdminController({
     handleGetUserInformation: function handleGetUserInformation(request) {
         request.sendResponse(request.user);
     },
+
+    /**
+     * TODO: document
+     * 
+     * @param request @todo 
+     */
+    handleAllowRegistration: function (request) {
+        redis.set('open-registration', 'true', function (err, result) {
+            request.sendSuccess();
+        });        
+    },
+
+    /**
+     * TODO: document
+     *  
+     */
+    handleCloseRegistration: function handleCloseRegistration(request) {
+        redis.del('open-registration', function (err, result) {
+            request.sendSuccess();
+        });
+    },
+    
 });

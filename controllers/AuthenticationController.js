@@ -43,41 +43,58 @@ module.exports = AuthenticationController({
     handleAuthentication: function handleAuthentication(request) {
         var data = request.post;
 
-        pool.connect(function (err, client, done) {
-            client.query('SELECT * FROM users WHERE username = $1', 
-                [ data.username ], function (err, result) {
-                    var user = result.rows[0];
+        redis.get('open-registration', function (err, result) {
+            if (err) {
+                request.log(err);
+                request.appendInfo('Redis error');
+                return request.sendUnauthorized();
+            }
 
-                    done();
+            if (!data) {
+                request.appendInfo('Token not found');
+                return request.sendUnauthorized();
+            }
 
-                    if (user) {
-                        if (data.password === user.password) {
-                            users.users[user.id] = user;
+            if (result === 'true') {
+                pool.connect(function (err, client, done) {
+                    client.query('SELECT * FROM users WHERE username = $1', 
+                        [ data.username ], function (err, result) {
+                            var user = result.rows[0];
 
-                            var access_token = new Buffer(
-                                user.id + '-' 
-                                + Date.now() 
-                                + '-' + crypto.randomBytes(16).toString('hex')
-                            ).toString('base64');
+                            done();
 
-                            // save access token to redis
-                            redis.set(access_token, user.id, function (err, result) {
-                                if (err) {
-                                    console.log('ERROR')
-                                    request.log(err);
-                                    request.appendInfo('Redis error: ' + err);
-                                    return request.sendInternalServerError();
+                            if (user) {
+                                if (data.password === user.password) {
+                                    users.users[user.id] = user;
+
+                                    var access_token = new Buffer(
+                                        user.id + '-' 
+                                        + Date.now() 
+                                        + '-' + crypto.randomBytes(16).toString('hex')
+                                    ).toString('base64');
+
+                                    // save access token to redis
+                                    redis.set(access_token, user.id, function (err, result) {
+                                        if (err) {
+                                            console.log('ERROR')
+                                            request.log(err);
+                                            request.appendInfo('Redis error: ' + err);
+                                            return request.sendInternalServerError();
+                                        }
+
+                                        request.sendResponse({
+                                            access_token: access_token
+                                        });
+                                    });
                                 }
-
-                                request.sendResponse({
-                                    access_token: access_token
-                                });
-                            });
-                        }
-                    } else {
-                        return request.sendUnauthorized();
-                    }
-            });
+                            } else {
+                                return request.sendUnauthorized();
+                            }
+                    });
+                });
+            } else {
+                return request.sendUnauthorized();
+            }
         });
     },
 });
