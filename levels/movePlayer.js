@@ -37,6 +37,33 @@ module.exports = function (player, direction, options) {
 
                 player.steps += this.map[position.y][position.x].weight;
             }
+            else if (this.map[position.y][position.x].type == "key" && this.map[position.y][position.x].used == false) {
+                player.inventory.keys++;
+                this.map[position.y][position.x].used == true;
+
+                player.position.x = position.x;
+                player.position.y = position.y;
+
+                player.steps += this.map[position.y][position.x].weight;
+            }
+            else if (this.map[position.y][position.x].type == "water" && this.map[position.y][position.x].traversable == false && player.inventory.wood > 0) {
+                player.inventory.wood--;
+                this.map[position.y][position.x].traversable == true;
+
+                player.position.x = position.x;
+                player.position.y = position.y;
+
+                player.steps += this.map[position.y][position.x].weight;
+            }
+            else if (this.map[position.y][position.x].type == "apple" && this.map[position.y][position.x].used == false) {
+                player.inventory.apple++;
+                this.map[position.y][position.x].used == true;
+
+                player.position.x = position.x;
+                player.position.y = position.y;
+
+                player.steps += this.map[position.y][position.x].weight;
+            }
             else if(this.map[position.y][position.x].traversable) {
                 player.position.x = position.x;
                 player.position.y = position.y;
