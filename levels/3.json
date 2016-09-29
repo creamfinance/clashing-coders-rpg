@@ -14,22 +14,22 @@
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tileheight":42,
+ "tileheight":32,
  "tilesets":[
         {
-         "columns":4,
+         "columns":3,
          "firstgid":1,
-         "image":"..\/Downloads\/tileset coding contest.png",
+         "image":"..\/..\/..\/home\/ml\/Downloads\/tileset coding contest.png",
          "imageheight":128,
          "imagewidth":96,
          "margin":0,
          "name":"terrain",
          "spacing":0,
          "tilecount":12,
-         "tileheight":42,
-         "tilewidth":42
+         "tileheight":32,
+         "tilewidth":32
         }],
- "tilewidth":42,
+ "tilewidth":32,
  "version":1,
  "width":600
 }

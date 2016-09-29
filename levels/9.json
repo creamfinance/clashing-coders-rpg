@@ -19,13 +19,13 @@
         {
          "columns":3,
          "firstgid":1,
-         "image":"..\/tiles\/tileset coding contest.png",
-         "imageheight":96,
+         "image":"..\/..\/..\/home\/ml\/Downloads\/tileset coding contest.png",
+         "imageheight":128,
          "imagewidth":96,
          "margin":0,
          "name":"cc tileset",
          "spacing":0,
-         "tilecount":9,
+         "tilecount":12,
          "tileheight":32,
          "tilewidth":32
         }],
