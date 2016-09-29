@@ -14,6 +14,7 @@ module.exports = {
         7: require('../levels/7'),
         8: require('../levels/8'),
         9: require('../levels/9'),
+        10: require('../levels/10'),
     },
     get: function (level_num) {
         return new World(this.levels[level_num]);
