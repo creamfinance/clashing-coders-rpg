@@ -12,6 +12,10 @@ module.exports = function LevelResolver(request, next) {
         request.level = request.user.current_level;
         next();
     } else if (level_id) {
+        if (level_id > levels.levels.length) {
+            return request.sendUnauthorized();
+        }
+
         if (level_id == 1) {
             request.level = levels.get(level_id);
             next();
