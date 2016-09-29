@@ -1,6 +1,6 @@
 module.exports = {
     init: function () {
-        this.pushedButtons = [];
+        this.players[0].pushedButtons = [];
     },
     player_definition: [{ x:10, y:190 }],
     goodButtons: [

@@ -1,4 +1,4 @@
-level = 7
+level = 9
 sf = []
 
 if level == 3:
@@ -15,7 +15,7 @@ if level == 2:
     # start and destination
     sf.append((3, 3, 138, 139))
 
-if level == 7:
+if level == 9:
     n = 200 # horizontal size of the map
     m = 200 # vertical size of the map
 
