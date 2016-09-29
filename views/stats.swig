@@ -25,3 +25,8 @@ Leaderboard
     </table>
 </div>
 {% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    setTimeout(function(){ window.location.reload(); }, 5000);
+</script>
+{% endblock %}
