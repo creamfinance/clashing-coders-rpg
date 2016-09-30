@@ -75,6 +75,7 @@ module.exports = MetagameController({
      */
     handleGetStatsView: function handleGetStatsView(request) {
         UserRepository.getStats(function (result) {
+            console.log(result);
             request.write(Templates.get('stats')({ users: result }));
             request.end();
         });
