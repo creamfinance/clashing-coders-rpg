@@ -8,6 +8,10 @@ module.exports = Class('Request', Object, {
         this.res = res;
         this.session = null;
 
+        res.on('error', function (err) {
+            console.log('Response Error', err);
+        });
+
         if (req.headers) {
             this.handleHeaders();
         }
@@ -53,16 +57,12 @@ module.exports = Class('Request', Object, {
         }
     },
     write: function (data) {
-        try {
-            if (data instanceof Buffer) {
-                this.res.write(data);
-            } else if (data instanceof Object) {
-                this.res.write(JSON.stringify(data));
-            } else {
-                this.res.write(data);
-            }
-        } catch (e) {
-            console.log(e);
+        if (data instanceof Buffer) {
+            this.res.write(data);
+        } else if (data instanceof Object) {
+            this.res.write(JSON.stringify(data));
+        } else {
+            this.res.write(data);
         }
     },
     parseDataPost: function () {

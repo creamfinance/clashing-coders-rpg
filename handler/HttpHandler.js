@@ -22,7 +22,7 @@ module.exports = Class('HttpHandler', Object, {
             .listen(this.settings.port, function (err, reply) {
                 // we got a socket path
                 if (!isNaN(parseFloat(n)) && isFinite(n)) {
-                } else {    
+                } else {
                     fs.chmodSync(n, '775');
                 }
             });
