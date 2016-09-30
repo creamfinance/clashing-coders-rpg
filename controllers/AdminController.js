@@ -176,8 +176,10 @@ module.exports = AdminController({
      * @param request @todo
      */
     handleListUsers: function handleListUsers(request) {
-        request.write(Template.get('users')({ token: request.token, users: UserRepository.users }));
-        request.end();
+        UserRepository.fetchAll(function (users) {
+            request.write(Template.get('users')({ token: request.token, users: users }));
+            request.end();
+        });
     },
 
     /**
@@ -187,8 +189,10 @@ module.exports = AdminController({
      */
     handleCheckIn: function handleCheckIn(request) {
         var that = this;
+
         UserRepository.checkIn(request.user, function () {
-            that.handleListUsers(request);
+            request.write(Template.get('user')({ token: request.token, user: request.user }));
+            request.end();
         });
     },
 

@@ -13,17 +13,19 @@ Users
     <table class="table table-striped table-condensed">
         <thead>
             <tr>
-                <td>User</td>
+                <td>Name</td>
+                <td>Email</td>
                 <td>Action</td>
         </thead>
         <tbody>
             {% for user in users %}
             <tr class="{% if user.checked_in %}success{% endif %}">    
+                <td>{{ user.name }}</td>
                 <td>{{ user.username }}</td> 
                 <td>
                     {% if ! user.checked_in %}
                     <form action="/admin/{{ token }}/checkin/{{ user.id }}" method="post">
-                        <button type="submit" class="btn btn-default">check in</button>
+                        <button type="submit" class="btn btn-xs btn-default">check in</button>
                     </form>
                     {% endif %}
                 </td> 

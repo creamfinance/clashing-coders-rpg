@@ -52,6 +52,18 @@ module.exports = {
     },
     /**
      * TODO: document
+     *  
+     */
+    fetchAll: function fetchAll(cb) {
+        pool.connect(function (err, client, done) {
+            client.query('SELECT * FROM users ORDER BY name', [], function (err, result) {
+                if (err) { return console.log(err); }
+                cb(result.rows);
+            });
+        });    
+    },
+    /**
+     * TODO: document
      *
      * @param user @todo
      */
