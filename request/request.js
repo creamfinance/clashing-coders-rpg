@@ -7,7 +7,7 @@ module.exports = Class('Request', Object, {
         this.req = req;
         this.res = res;
         this.session = null;
-        
+
         if (req.headers) {
             this.handleHeaders();
         }
@@ -53,12 +53,16 @@ module.exports = Class('Request', Object, {
         }
     },
     write: function (data) {
-        if (data instanceof Buffer) {
-            this.res.write(data);
-        } else if (data instanceof Object) {
-            this.res.write(JSON.stringify(data));
-        } else {
-            this.res.write(data);
+        try {
+            if (data instanceof Buffer) {
+                this.res.write(data);
+            } else if (data instanceof Object) {
+                this.res.write(JSON.stringify(data));
+            } else {
+                this.res.write(data);
+            }
+        } catch (e) {
+
         }
     },
     parseDataPost: function () {
@@ -66,7 +70,7 @@ module.exports = Class('Request', Object, {
             this.data &&
             'content-type' in this.req.headers &&
             this.req.headers['content-type'].toLowerCase().indexOf('application/x-www-form-urlencoded') == 0) {
-            
+
             this.post = querystring.parse(this.data.toString());
         }
     },

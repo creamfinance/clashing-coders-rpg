@@ -13,7 +13,7 @@ module.exports = AuthenticationController({
     },
     /**
      * TODO: document
-     *  
+     *
      */
     registerRouter: function registerRouter(router) {
         router.registerPath('POST', '/authenticate',
@@ -36,9 +36,9 @@ module.exports = AuthenticationController({
 
     /**
      * TODO: document
-     * 
+     *
      * @param request @todo
-     * @param data @todo 
+     * @param data @todo
      */
     handleAuthentication: function handleAuthentication(request) {
         var data = request.post;
@@ -57,7 +57,7 @@ module.exports = AuthenticationController({
 
             if (result === 'true') {
                 pool.connect(function (err, client, done) {
-                    client.query('SELECT * FROM users WHERE username = $1', 
+                    client.query('SELECT * FROM users WHERE username = $1',
                         [ data.username ], function (err, result) {
                             var user = result.rows[0];
 
@@ -68,8 +68,8 @@ module.exports = AuthenticationController({
                                     users.users[user.id] = user;
 
                                     var access_token = new Buffer(
-                                        user.id + '-' 
-                                        + Date.now() 
+                                        user.id + '-'
+                                        + Date.now()
                                         + '-' + crypto.randomBytes(16).toString('hex')
                                     ).toString('base64');
 
