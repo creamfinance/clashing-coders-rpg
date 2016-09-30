@@ -58,6 +58,7 @@ module.exports = {
         pool.connect(function (err, client, done) {
             client.query('SELECT * FROM users ORDER BY name', [], function (err, result) {
                 if (err) { return console.log(err); }
+                done();
                 cb(result.rows);
             });
         });    
