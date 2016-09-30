@@ -5,7 +5,16 @@ Leaderboard
 {% endblock %}
 
 {% block content %}
-<h1>Leaderboard {% if level %}- Level {{ level }}{% endif %}</h1>
+<div class="head" style="background-color: #e92323;padding: 15px;/* padding-bottom: 10px; *//* display: inline-block; */vertical-align: middle;">
+        <img src="/img/logo.png" style="/* width: 375px; */margin-left: auto;margin-right: auto;display: inline-block;height: 90px;vertical-align: middle;">
+    <h1 style="
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0;
+    margin-left: 60px;
+    color: white;
+">Leaderboard {% if level %}- Level {{ level }}{% endif %}</h1></div>
 
 <div class="row">
     <table class="table table-striped">
