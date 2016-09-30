@@ -157,7 +157,7 @@ module.exports = {
         pool.connect(function (err, client, done) {
             if (err) { console.log(err); }
 
-            client.query('SELECT user_id, username, max(level_id) as level, max(finished) - (date(now()) + interval \'12 hours\') as total_time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE finished IS NOT NULL GROUP BY user_id, username ORDER BY level desc, total_time', [],
+            client.query('SELECT user_id, username, max(level_id) as level, (max(finished) - (date(now()) + interval \'12 hours\')) + sum(times_failed) * interval \'1 minute\' as total_time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE finished IS NOT NULL GROUP BY user_id, username ORDER BY level desc, total_time', [],
                 function (err, result) {
                     done();
 
@@ -182,7 +182,7 @@ module.exports = {
         pool.connect(function (err, client, done) {
             if (err) { console.log(err); }
 
-            client.query('SELECT user_id, username, coalesce(finished, now()) - (date(now()) + interval \'12 hours\') as time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE level_id = $1 ORDER BY time', [ level_id],
+            client.query('SELECT user_id, username, (coalesce(finished, now()) - (date(now()) + interval \'12 hours\')) + times_failed * interval \'1 minute\'  as time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE level_id = $1 ORDER BY time', [ level_id],
                 function (err, result) {
                     done();
 
