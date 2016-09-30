@@ -62,7 +62,7 @@ module.exports = Class('Request', Object, {
                 this.res.write(data);
             }
         } catch (e) {
-
+            console.log(e);
         }
     },
     parseDataPost: function () {
