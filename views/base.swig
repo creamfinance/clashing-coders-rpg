@@ -6,6 +6,9 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    <div class="head" style="background-color: #e92323; padding-top: 10px; padding-bottom: 10px;">
+        <img src="/img/logo.png" style="width: 375px; margin-left: auto; margin-right: auto; display: block "/>
+    </div>
     <div class="container">
         {% block content %}{% endblock %}
     </div>
