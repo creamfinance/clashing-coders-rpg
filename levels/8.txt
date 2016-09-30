@@ -1,7 +1,7 @@
 In this level there are 2 new tiles: keys and locked doors. Keys work like normal ground tiles except a key will be added to your inventory when you step on such a tile.
 From a single key tile you can only receive a key once; however, you can have multiple keys in your inventory. Locked doors are normally not traversable, but will be
 unlocked automatically if you try to step on them with at least 1 key in your inventory. The key will be consumed in the process and the locked door will stay traversable,
-so you can walk through it multiple times once you unlocked it.
+so you can walk through it multiple times once you've unlocked it.
 
 The tiles are encoded as:
 "K" - Key tile, weight: 1

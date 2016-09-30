@@ -3,6 +3,10 @@ Trying to move on one of those tiles will leave the player standing on his posit
 
 If you need to check for the players position on the server you can invoke the /player/status GET request, which will return you the player's position, amongst other things.
 
+METHOD: GET
+HEADER: Content-Type: application/json; x-token: [your token]
+URL: http://contest.clashing-coders.at/player/status
+
 As an example, you can use this cURL command (if you have curl installed):
 curl -H "Content-Type: application/json" -H "x-token: [YOUR TOKEN]" -X GET "HTTP://contest.clashing-coders.at/player/status"
 

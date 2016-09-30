@@ -7,4 +7,6 @@ This level for example consists of the following tiles:
 .: Ground, traversable, weight: 1
 M: Mountain, traversable, weight: 5
 
-Move your player from the his starting position (3,16) to the goal at 595 on the x-axis and anywhere on the y-axis and POST to level/3/end to finish the level.
+Additionally, the /player/status GET request will provide you with the steps the player has already taken under the "steps" key.
+
+Move your player from the his starting position (3,16) to the goal at 595 on the x-axis and anywhere on the y-axis in under 650 steps and POST to level/3/end to finish the level.

@@ -5,13 +5,13 @@ The map consists of tiles, some of wich can be traversed and some not. A detaile
 #: Walls, not traversable
 .: Ground, traversable
 
-The POST request to /level/1/start will provide you with all the necessary information. Don't worry, you can start over a level as often as you want by simply setting off the start request again; it will reset the level's state to starting conditions.
+The POST request to /level/1/start will provide you with all the necessary information. Don't worry, you can start over a level as often as you want by simply setting off the start request again; it will reset the level's state to starting conditions with no penalty.
 
 As an example, you can use this curl command (if you have curl installed):
 curl -H "Content-Type: application/json" -H "x-token: [YOUR TOKEN HERE]" -X POST "HTTP://contest.clashing-coders.at/level/1/start"
 
 It will provide you with a response like this:
-{"width":10,"height":10,"tileset":{"#":{"type":"wall","traversable":false,"weight":1},".":{"type":"ground","traversable":true,"weight":1},"T":{"type":"forest","traversable":true,"weight":2}},"map":["##########","#........#","#........#","#......T.#","#......T.#","#......T.#","#TTTTTTT.#","#........#","#........#","##########"],"player":{"position":{"x":1,"y":1},"inventory":{},"steps":0}}
+{"width":10,"height":10,"tileset":{"#":{"type":"wall","traversable":false,"weight":1},".":{"type":"ground","traversable":true,"weight":1}},"map":["##########","#........#","#........#","#........#","#........#","#........#","#........#","#........#","#........#","##########"],"player":{"position":{"x":1,"y":1},"inventory":{},"steps":0}}
 
 The "width" and "height" keys will give you the width and height of the map respectively.
 The "tileset" key will provide you with a definition of the characters used in the map. Each entry in this object will have the character as key and it's metadata as object.
@@ -19,12 +19,3 @@ The "tileset" key will provide you with a definition of the characters used in t
     "traversable" is true if the player can walk on that tile, false otherwise
 The "map" key will hold an array of strings, each string will represent a row of the map, in order.
 The "player" key will hold the player's initial position.
-
-When you send a POST request to /level/1/end you signal the server that you finished the level. The server will evaluate if the winning conditions were met and responds "level cleared" or "goal not met" back to you.
-
-As an example, you can use this curl command (if you have curl installed):
-curl -H "Content-Type: application/json" -H "x-token: [YOUR TOKEN HERE]" -X POST "HTTP://contest.clashing-coders.at/level/1/end"
-
-Example responses:
-{"result":"level cleared!","steps":14,"position":{"x":8,"y":8}}
-{"error":"goal not met!","messages":[],"steps":13,"position":{"x":7,"y":8}}
