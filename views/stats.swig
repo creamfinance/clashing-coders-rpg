@@ -15,13 +15,13 @@ Leaderboard
                 <td>Player</td>
                 <td>Time</td>
         </thead>
-        {% for user in users %}
         <tbody>
+            {% for user in users %}
             <tr>
                 <td>{{user.level || level}}</td><td>{{user.user}}</td><td>{{user.time}}</td>
             </tr>
+            {% endfor %}
         </tbody>
-        {% endfor %}
     </table>
 </div>
 {% endblock %}
