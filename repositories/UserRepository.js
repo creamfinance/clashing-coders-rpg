@@ -158,7 +158,7 @@ module.exports = {
         pool.connect(function (err, client, done) {
             if (err) { console.log(err); }
 
-            client.query('SELECT user_id, username, max(level_id) as level,name, (max(finished) - (date(now()) + interval \'12 hours\')) + sum(times_failed) * interval \'1 minute\' as total_time FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE finished IS NOT NULL GROUP BY user_id, username, name ORDER BY level desc, total_time', [],
+            client.query('SELECT user_id, username, max(level_id) as level,name, (max(finished) - (date(now()) + interval \'12 hours\')) + sum(times_failed) * interval \'1 minute\' as total_time, sum(times_failed) as times_failed FROM users JOIN level_metadata ON users.id=level_metadata.user_id WHERE finished IS NOT NULL GROUP BY user_id, username, name ORDER BY level desc, total_time', [],
                 function (err, result) {
                     done();
 
@@ -167,6 +167,7 @@ module.exports = {
                     cb(result.rows.map(function (obj) { return {
                         user: obj.name,
                         level: obj.level,
+                        fails: obj.times_failed,
                         time: ~~obj.total_time.hours + ':' + ~~obj.total_time.minutes + ':' + ~~obj.total_time.seconds,
                     }; }));
 

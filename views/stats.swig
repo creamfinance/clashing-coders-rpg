@@ -27,7 +27,7 @@ Leaderboard
         <tbody>
             {% for user in users %}
             <tr>
-                <td>{{user.level || level}}</td><td>{{user.user}}</td><td>{{user.time}}</td>
+                <td>{{user.level || level}}</td><td>{{user.user}}</td><td>{{user.time}} (+{{user.fails}} minutes)</td>
             </tr>
             {% endfor %}
         </tbody>

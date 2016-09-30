@@ -86,6 +86,8 @@ module.exports = AuthenticationController({
                                             access_token: access_token
                                         });
                                     });
+                                } else {
+                                    return request.sendUnauthorized();
                                 }
                             } else {
                                 return request.sendUnauthorized();
