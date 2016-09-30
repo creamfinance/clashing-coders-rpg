@@ -156,7 +156,7 @@ module.exports = AdminController({
          // TODO: implement
         // store in DB
         // TODO: reload users in interval in repo
-        UserRepository.create(request.post.username, randomstring.generate(12), request.post.email, function (user) {
+        UserRepository.create(request.post.username, randomstring.generate(5), request.post.email, function (user) {
             request.write(Template.get('user')({ user: user, token: request.token }));
             request.end();
         });
