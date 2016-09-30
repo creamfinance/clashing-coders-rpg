@@ -36,6 +36,8 @@ Leaderboard
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-    setTimeout(function(){ window.location.reload(); }, 5000);
+    var timeout = setTimeout(function(){ 
+        window.location.reload(); 
+    }, 5000);
 </script>
 {% endblock %}
