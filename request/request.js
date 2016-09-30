@@ -7,7 +7,11 @@ module.exports = Class('Request', Object, {
         this.req = req;
         this.res = res;
         this.session = null;
-        
+
+        res.on('error', function (err) {
+            console.log('Response Error', err);
+        });
+
         if (req.headers) {
             this.handleHeaders();
         }
@@ -66,7 +70,7 @@ module.exports = Class('Request', Object, {
             this.data &&
             'content-type' in this.req.headers &&
             this.req.headers['content-type'].toLowerCase().indexOf('application/x-www-form-urlencoded') == 0) {
-            
+
             this.post = querystring.parse(this.data.toString());
         }
     },
