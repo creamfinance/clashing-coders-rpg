@@ -20,7 +20,7 @@ Users
         <tbody>
             {% for user in users %}
             <tr class="{% if user.checked_in %}success{% endif %}">    
-                <td>{{ user.name }}</td>
+                <td>{{ user.name }} {% if user.from_abroad %}(Abroad){% endif %}</td>
                 <td>{{ user.username }}</td> 
                 <td>
                     {% if ! user.checked_in %}
