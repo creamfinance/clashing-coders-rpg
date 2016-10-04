@@ -73,7 +73,8 @@ module.exports = AuthenticationController({
                 return request.sendUnauthorized();
             }
 
-            if (false) {
+            console.log(result);
+            if (result == 'true') {
                 pool.connect(function (err, client, done) {
                     client.query('SELECT * FROM users WHERE username = $1',
                         [ data.username ], function (err, result) {

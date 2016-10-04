@@ -25,6 +25,12 @@ node start.js
 ```
 to start up the server. The server runs on localhost:8888 by default.
 
+To open authentication, open the redis cli and set off
+```redis
+set open-registration true
+```
+to allow users to authenticate.
+
 ## Additional views
 If you want to have access to the management views for whatever reason you need a few more steps. First, you need a webserver of your choice to serve static files and redirects to the node service for everything else. We used nginx for that and a usable config is provided in the repository. Just make sure to adapt the path in the config file to the location you cloned the repository to.
 
