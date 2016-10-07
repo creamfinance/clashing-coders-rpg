@@ -32,7 +32,14 @@ set open-registration true
 to allow users to authenticate.
 
 ## Additional views
-If you want to have access to the management views for whatever reason you need a few more steps. First, you need a webserver of your choice to serve static files and redirects to the node service for everything else. We used nginx for that and a usable config is provided in the repository. Just make sure to adapt the path in the config file to the location you cloned the repository to.
+If you want to have access to the management views for whatever reason you need a few more steps. First, you need a webserver of your choice to serve static files and redirects to the node service for everything else. We used nginx for that and a usable config module is provided in the repository. Just make sure to adapt the path in the config file to the location you cloned the repository to and link or copy it to your nginx config directory (usually `/etc/nginx/conf.d`). This is assuming you are using NGINX's default config which should come with a section like so:
+```nginx
+# Load modular configuration files from the /etc/nginx/conf.d directory.
+# See http://nginx.org/en/docs/ngx_core_module.html#include
+# for more information.
+include /etc/nginx/conf.d/*.conf;
+```
+within the http section to include modular configuration files from a directory. If you are running a different configuration, suite yourself :)
 
 # How-To Play
 Now to the basics, we expect you to work against a RESTful API and solve some quests in a 2D game. These quests are rather simple as it would be unfair to exploit too much randomness as your finishing time of each quest will determine your rank in the Leaderboard. The challenge resolves around building algorithms to navigate through the game’s world and interacting with the items there. 
