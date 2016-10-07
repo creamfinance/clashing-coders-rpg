@@ -84,7 +84,10 @@ module.exports = AuthenticationController({
 
                             if (user) {
                                 if (data.password === user.password) {
-                                    users.users[user.id] = user;
+                                    if (! (user.id in users.users)) {
+                                        users.users[user.id] = user;
+                                        user.level_metadata = {};
+                                    }
 
                                     var access_token = new Buffer(
                                         user.id + '-'
