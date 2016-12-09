@@ -61,7 +61,7 @@ The communication will be done over the HTTP Protocol with JSON as data structur
 
 Example via cURL: 
 ```sh
-curl -H "Content-Type: application/json" -X POST -d '{ "username": "[user]", "password":"[secretpassword]" }' "http://contest.clashing-coders.at/authenticate”
+curl -H "Content-Type: application/json" -X POST -d '{ "username": "[user]", "password":"[secretpassword]" }' "http://localhost:8888/authenticate”
 ```
 
 Response:
@@ -76,7 +76,7 @@ Response:
 
 Example via cURL: 
 ```sh
-curl -H "Content-Type: application/json" -H "x-token: [x-token]" -X GET "http://contest.clashing-coders.at/level/1"
+curl -H "Content-Type: application/json" -H "x-token: [x-token]" -X GET "http://localhost:8888/level/1"
 ```
 
 The level will start with the index 1 and end with 10, so don’t forget to replace the X.
@@ -88,7 +88,7 @@ The level will start with the index 1 and end with 10, so don’t forget to repl
 
 Example via cURL:
 ```sh
-curl -H "Content-Type: application/json" -H "x-token: [x-token]" -X POST "http://contest.clashing-coders.at/level/1/start"
+curl -H "Content-Type: application/json" -H "x-token: [x-token]" -X POST "http://localhost:8888/level/1/start"
 ```
 
 ### Ingame commands: 
@@ -98,7 +98,7 @@ curl -H "Content-Type: application/json" -H "x-token: [x-token]" -X POST "http:/
 
 Example via cURL:
 ```sh
-curl -H "Content-Type: application/json" -H "x-token: [TOKEN]" -X PUT "http://contest.clashing-coders.at/player/right"
+curl -H "Content-Type: application/json" -H "x-token: [TOKEN]" -X PUT "http://localhost:8888/player/right"
 ```
 
 ### Ingame commands as bulk: 
@@ -109,7 +109,7 @@ curl -H "Content-Type: application/json" -H "x-token: [TOKEN]" -X PUT "http://co
 
 Example via cURL:
 ```sh
-curl -H "Content-Type: application/json" -H "x-token: [TOKEN]" -X PUT -d '{"left", "right", "up", "down"}' "http://contest.clashing-coders.at/player/bulk"
+curl -H "Content-Type: application/json" -H "x-token: [TOKEN]" -X PUT -d '{"left", "right", "up", "down"}' "http://localhost:8888/player/bulk"
 ```
 
 If a single command in the given array is not a valid one, the execution will stop and an error will be returned for you. Commands up to that point are executed though. 
