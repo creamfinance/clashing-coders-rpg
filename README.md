@@ -11,6 +11,10 @@ We host this here because of popular demand to make the examples of our contest 
  
 The platform itself is written purely in javascript and running on nodejs. Since we used 7 instances on site to be able to bear the load of 50+ users barraging us with movement requests, the server uses redis as a storage for login sessions. Postgres is used as a persistant storage for user and level metadata (clear time, fails).
 
+NOTE if you're running this on something non-redhat, you might need to recompile brypts C bindings with `npm rebuild`, which in turn needs `python`, `gcc` and the bcrypt libraries to be installed.
+
+NOTE NOTE If you are installing this on windows specifically `gcc` will not help you and you'll need .NET framework 2.0 SDK 2 installed. Since we're not running windows machines around here, we cannot really help you beyond that point. Good luck :)
+
 ## Setup
 Assuming you have the above requirements installed and you have the repository cloned, you first have to prepare the database.
 ```sql
