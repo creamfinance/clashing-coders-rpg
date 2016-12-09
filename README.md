@@ -55,7 +55,7 @@ The communication will be done over the HTTP Protocol with JSON as data structur
 
 ### Authentication Request
  - METHOD: POST
- - URL: http://contest.clashing-coders.at/authenticate
+ - URL: http://localhost:8888/authenticate
  - HEADER: Content-Type: application/json
  - BODY: { "username": "[user]", "password":"[secretpassword]" }
 
@@ -71,7 +71,7 @@ Response:
 
 ### Level Description Request
  - METHOD: GET
- - URL: http://contest.clashing-coders.at/level/[X]
+ - URL: http://localhost:8888/level/[X]
  - HEADER: Content-Type: application/json; x-token: [x-token]
 
 Example via cURL: 
@@ -83,7 +83,7 @@ The level will start with the index 1 and end with 10, so don’t forget to repl
 
 ### Start/End Level Request
  - METHOD: POST
- - URL: http://contest.clashing-coders.at/level/[X]/[start|end]
+ - URL: http://localhost:8888/level/[X]/[start|end]
  - HEADER: Content-Type: application/json; x-token: [x-token]
 
 Example via cURL:
@@ -93,7 +93,7 @@ curl -H "Content-Type: application/json" -H "x-token: [x-token]" -X POST "http:/
 
 ### Ingame commands: 
  - METHOD: PUT
- - URL: http://contest.clashing-coders.at/player/[command]
+ - URL: http://localhost:8888/player/[command]
  - HEADER: Content-Type: application/json; x-token: [your token]
 
 Example via cURL:
@@ -103,7 +103,7 @@ curl -H "Content-Type: application/json" -H "x-token: [TOKEN]" -X PUT "http://co
 
 ### Ingame commands as bulk: 
  - METHOD: PUT
- - URL: http://contest.clashing-coders.at/player/bulk
+ - URL: http://localhost:8888/player/bulk
  - HEADER: Content-Type: application/json; x-token: [your token]
  - BODY: [[command1], [command2], ...] //the first [] is the JSON Array the second level [] are the placeholders
 
