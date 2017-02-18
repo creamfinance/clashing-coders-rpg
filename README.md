@@ -21,7 +21,7 @@ Assuming you have the above requirements installed and you have the repository c
 CREATE DATABASE clashing_coders
 ```
 should take care of the database; then simply run the provided setup.sql against that database to set up the necessary tables.
-Then you should insert yourself a user into the users table, so you will be able to authenticate against the API later. Passwords are stored in plain text as we generated random passwords for the contest and never planned on exposing them for longer than the contest itself. Make sure to also assign a password to the postgres user (`ALTER USER postgres PASSWORD 'newPassword';`) and create a .pgpass file in your home directory (see [here](https://www.postgresql.org/docs/9.5/static/libpq-pgpass.html).
+Then you should insert yourself a user into the users table, so you will be able to authenticate against the API later. Passwords are stored in plain text as we generated random passwords for the contest and never planned on exposing them for longer than the contest itself. Make sure to also assign a password to the postgres user (`ALTER USER postgres PASSWORD 'newPassword';`) and create a .pgpass file in your home directory (see [here](https://www.postgresql.org/docs/9.5/static/libpq-pgpass.html)).
 
 Make sure postgres and redis are running then run
 ```bash
