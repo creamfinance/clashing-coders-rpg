@@ -17,7 +17,7 @@
 */
 
 var Class = require('class'),
-    bcrypt = require('bcrypt'),
+    bcrypt = require('bcryptjs'),
     crypto = require('crypto'),
     pool = require('../pool'),
     redis = require('../redis'),
